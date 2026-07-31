@@ -7,27 +7,28 @@
    1. CSS DESIGN SYSTEM & TOKENS
    -------------------------------------------------------------------------- */
 :root {
-  /* Color Palette */
-  --bg-obsidian: #08090C;
-  --bg-charcoal: #111318;
-  --bg-card: #181B22;
-  --bg-card-hover: #222630;
+  /* Color Palette: Deep Obsidian, Warm Champagne Gold, Architectural Charcoal */
+  --bg-dark: #0a0b0d;
+  --bg-charcoal: #121418;
+  --bg-card: #181a20;
+  --bg-glass: rgba(24, 26, 32, 0.75);
   
   --color-gold: #D4AF37;
-  --color-gold-light: #F5D77F;
-  --color-gold-dark: #AA8725;
-  --color-cyan-glow: #00FFFF;
-
-  --text-main: #F0F2F5;
-  --text-muted: #9AA0A6;
-  --text-dim: #5F6368;
-  --border-color: rgba(212, 175, 55, 0.18);
+  --color-gold-light: #F3E5AB;
+  --color-gold-glow: rgba(212, 175, 55, 0.35);
+  --color-white: #FFFFFF;
+  --text-main: #E5E7EB;
+  --text-muted: #9CA3AF;
   --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-gold: rgba(212, 175, 55, 0.4);
 
-  /* Typography */
-  --font-heading: 'Syne', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --font-mono: 'Space Grotesk', monospace;
+  /* Typography System: Montserrat across all components */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
+  --font-mono: 'Montserrat', sans-serif;
+  
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.25s ease;
 
   /* Layout */
   --container-width: 1320px;
@@ -162,7 +163,7 @@ img {
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 800;
-  letter-spacing: normal;
+  letter-spacing: 4px;
   margin-bottom: 1.8rem;
   color: var(--text-main);
 }
@@ -244,7 +245,7 @@ img {
   font-family: var(--font-heading);
   font-size: 1.3rem;
   font-weight: 800;
-  letter-spacing: normal;
+  letter-spacing: 3px;
 }
 
 .brand-tag {
@@ -252,7 +253,7 @@ img {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--text-muted);
-  letter-spacing: normal;
+  letter-spacing: 1px;
 }
 
 .availability-pill {
@@ -570,7 +571,7 @@ img {
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--color-gold-light);
-  letter-spacing: normal;
+  letter-spacing: 2px;
 }
 
 .hero-title {
@@ -578,7 +579,7 @@ img {
   font-size: clamp(2.8rem, 6vw, 5.2rem);
   font-weight: 800;
   line-height: 1.05;
-  letter-spacing: normal;
+  letter-spacing: -1px;
   margin-bottom: 1.5rem;
   text-transform: uppercase;
 }
@@ -587,7 +588,6 @@ img {
   font-size: clamp(1rem, 1.5vw, 1.25rem);
   color: var(--text-muted);
   line-height: 1.7;
-  letter-spacing: normal;
   max-width: 680px;
   margin-bottom: 2.5rem;
 }
@@ -1867,9 +1867,24 @@ img {
 
 .nav-contact-btn {
   margin-left: 1.2rem;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.5px;
   font-weight: 700;
   padding: 0.65rem 1.6rem;
+}
+
+/* Montserrat & Normal Letter-Spacing Overrides */
+*, body, h1, h2, h3, h4, h5, h6, input, textarea, button, select {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.hero-title,
+.hero-subtitle,
+.logo-text,
+.brand-name,
+.brand-tag,
+.badge-text,
+.hero-badge {
+  letter-spacing: normal !important;
 }
 
 .legal-tag {
