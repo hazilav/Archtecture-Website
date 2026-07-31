@@ -33,6 +33,8 @@ function init260FrameCanvasHero() {
   const statusText = document.getElementById('statusText');
   const canvas = document.getElementById('heroCanvas');
   const textOverlay = document.getElementById('heroTextOverlay');
+  const badge = document.getElementById('heroLayerBadge');
+  const scrollInd = document.getElementById('heroScrollIndicator');
   const badgeNum = document.getElementById('badgeNum');
   const badgeTitle = document.getElementById('badgeTitle');
 
@@ -82,10 +84,10 @@ function init260FrameCanvasHero() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Calculate aspect-ratio cover crop
+    // Full-screen fit ratio so the entire building frame is visible without cropping/zooming in
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
-    const ratio = Math.max(hRatio, vRatio);
+    const ratio = Math.min(hRatio, vRatio);
     const centerShift_x = (canvas.width - img.width * ratio) / 2;
     const centerShift_y = (canvas.height - img.height * ratio) / 2;
 
@@ -121,7 +123,6 @@ function init260FrameCanvasHero() {
   }, 2200);
 
   // Preload Key Anchor Frames First for Ultra-Fast Instant Launch
-  // (Load frames 0, 10, 20... then fill in the rest)
   const priorityIndices = [];
   for (let i = 0; i < frameCount; i += 5) priorityIndices.push(i);
   for (let i = 0; i < frameCount; i++) {
@@ -144,7 +145,6 @@ function init260FrameCanvasHero() {
       imagesLoaded++;
       priorityCount++;
 
-      const progress = Math.min(100, Math.round((imagesLoaded / frameCount) * 100));
       const visualProgress = Math.min(100, Math.round((priorityCount / targetPriority) * 100));
 
       if (fill) fill.style.width = `${visualProgress}%`;
@@ -212,16 +212,19 @@ function init260FrameCanvasHero() {
       }
     });
 
-    // Fade out text overlay on initial scroll
-    if (textOverlay) {
-      gsap.to(textOverlay, {
+    // Fade out text overlay, frame badge indicator, and mouse scroll icon on initial scroll
+    const hideTargets = [textOverlay, badge, scrollInd].filter(Boolean);
+
+    if (hideTargets.length) {
+      gsap.to(hideTargets, {
         opacity: 0,
-        y: -40,
+        y: -30,
+        pointerEvents: "none",
         ease: "power1.inOut",
         scrollTrigger: {
           trigger: "#heroPinSection",
           start: "top top",
-          end: "+=40%",
+          end: "+=20%",
           scrub: true
         }
       });
