@@ -1,6 +1,6 @@
 /* ==========================================================================
    ARCHTECTURE - ARCHITECTURE ANIMATION & VISUALIZATION STUDIO
-   GSAP 260-FRAME CANVAS SCROLL-TRIGGERED SCRUBBING ENGINE
+   INSTANT-LOAD 260-FRAME CANVAS SCROLL-TRIGGERED SCRUBBING ENGINE
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,7 +24,7 @@ window.addEventListener('load', () => {
 });
 
 /* --------------------------------------------------------------------------
-   1. 260-FRAME HTML5 CANVAS HERO SCROLL-SCRUBBING ENGINE
+   1. INSTANT-LOAD 260-FRAME HTML5 CANVAS HERO SCROLL-SCRUBBING ENGINE
    -------------------------------------------------------------------------- */
 function init260FrameCanvasHero() {
   const loader = document.getElementById('blueprintLoader');
@@ -43,6 +43,7 @@ function init260FrameCanvasHero() {
   const images = [];
   const seq = { frame: 0 };
   let imagesLoaded = 0;
+  let loaderDismissed = false;
 
   function currentFramePath(index) {
     return `./assets/images/ezgif-frame-${String(index + 1).padStart(3, '0')}.png`;
@@ -54,9 +55,30 @@ function init260FrameCanvasHero() {
     renderFrame(Math.floor(seq.frame));
   }
 
+  // Find exact loaded frame or closest loaded neighbor for smooth 60fps rendering
+  function getBestLoadedImage(index) {
+    const target = images[index];
+    if (target && target.complete && target.naturalWidth > 0) {
+      return target;
+    }
+    // Search backwards for nearest ready frame
+    for (let i = index - 1; i >= 0; i--) {
+      if (images[i] && images[i].complete && images[i].naturalWidth > 0) {
+        return images[i];
+      }
+    }
+    // Search forwards
+    for (let i = index + 1; i < frameCount; i++) {
+      if (images[i] && images[i].complete && images[i].naturalWidth > 0) {
+        return images[i];
+      }
+    }
+    return null;
+  }
+
   function renderFrame(index) {
-    const img = images[index];
-    if (!img || !img.complete) return;
+    const img = getBestLoadedImage(index);
+    if (!img) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -77,41 +99,76 @@ function init260FrameCanvasHero() {
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
 
-  // Preload 260 High-Res Architectural Frame PNGs
+  function dismissLoader() {
+    if (loaderDismissed) return;
+    loaderDismissed = true;
+
+    if (fill) fill.style.width = '100%';
+    if (percentText) percentText.textContent = '100%';
+    if (statusText) statusText.textContent = 'STUDIO READY...';
+
+    if (loader) {
+      setTimeout(() => {
+        loader.classList.add('loaded');
+      }, 250);
+    }
+    setupGSAPScrollScrub();
+  }
+
+  // Safety fallback: Dismiss loader after 2.2 seconds max regardless of network latency
+  const safetyTimeout = setTimeout(() => {
+    dismissLoader();
+  }, 2200);
+
+  // Preload Key Anchor Frames First for Ultra-Fast Instant Launch
+  // (Load frames 0, 10, 20... then fill in the rest)
+  const priorityIndices = [];
+  for (let i = 0; i < frameCount; i += 5) priorityIndices.push(i);
   for (let i = 0; i < frameCount; i++) {
-    const img = new Image();
-    img.src = currentFramePath(i);
+    if (i % 5 !== 0) priorityIndices.push(i);
+  }
+
+  // Initialize image slots
+  for (let i = 0; i < frameCount; i++) {
+    images[i] = new Image();
+  }
+
+  let priorityCount = 0;
+  const targetPriority = Math.min(15, priorityIndices.length);
+
+  priorityIndices.forEach((frameIdx) => {
+    const img = images[frameIdx];
+    img.src = currentFramePath(frameIdx);
+
     img.onload = () => {
       imagesLoaded++;
-      const progress = Math.round((imagesLoaded / frameCount) * 100);
-      if (fill) fill.style.width = `${progress}%`;
-      if (percentText) percentText.textContent = `${progress}%`;
-      if (statusText && progress % 20 === 0) {
-        statusText.textContent = `PRELOADING FRAME ${imagesLoaded} / ${frameCount}...`;
-      }
+      priorityCount++;
+
+      const progress = Math.min(100, Math.round((imagesLoaded / frameCount) * 100));
+      const visualProgress = Math.min(100, Math.round((priorityCount / targetPriority) * 100));
+
+      if (fill) fill.style.width = `${visualProgress}%`;
+      if (percentText) percentText.textContent = `${visualProgress}%`;
+      if (statusText) statusText.textContent = `PRELOADING FRAME ${imagesLoaded} / ${frameCount}...`;
 
       if (imagesLoaded === 1) {
         renderFrame(0);
       }
 
-      if (imagesLoaded === frameCount) {
-        if (loader) {
-          setTimeout(() => {
-            loader.classList.add('loaded');
-          }, 300);
-        }
-        setupGSAPScrollScrub();
+      // Fast-launch: Open website as soon as priority anchor frames are loaded
+      if (priorityCount >= targetPriority && !loaderDismissed) {
+        clearTimeout(safetyTimeout);
+        dismissLoader();
       }
     };
+
     img.onerror = () => {
       imagesLoaded++;
-      if (imagesLoaded === frameCount) {
-        if (loader) loader.classList.add('loaded');
-        setupGSAPScrollScrub();
+      if (!loaderDismissed && imagesLoaded > 10) {
+        dismissLoader();
       }
     };
-    images.push(img);
-  }
+  });
 
   function setupGSAPScrollScrub() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
