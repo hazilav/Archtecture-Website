@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initTestimonialSlider();
   initProcessTimeline();
   initStudioClocks();
-  initAmbientAudio();
   initContactForm();
   initServiceModals();
 });
@@ -33,10 +32,7 @@ function init260FrameCanvasHero() {
   const statusText = document.getElementById('statusText');
   const canvas = document.getElementById('heroCanvas');
   const textOverlay = document.getElementById('heroTextOverlay');
-  const badge = document.getElementById('heroLayerBadge');
   const scrollInd = document.getElementById('heroScrollIndicator');
-  const badgeNum = document.getElementById('badgeNum');
-  const badgeTitle = document.getElementById('badgeTitle');
 
   if (!canvas) return;
 
@@ -189,29 +185,13 @@ function init260FrameCanvasHero() {
         onUpdate: (self) => {
           const currentIdx = Math.floor(seq.frame);
           renderFrame(currentIdx);
-
-          const p = self.progress;
-          const frameNumStr = String(currentIdx + 1).padStart(3, '0');
-          if (badgeNum) badgeNum.textContent = `FRAME ${frameNumStr} / 260`;
-
-          if (badgeTitle) {
-            if (p < 0.25) {
-              badgeTitle.textContent = "EXTERIOR FACADE ANATOMY";
-            } else if (p >= 0.25 && p < 0.50) {
-              badgeTitle.textContent = "EXPLODED ARCHITECTURAL CUTAWAY";
-            } else if (p >= 0.50 && p < 0.75) {
-              badgeTitle.textContent = "PANORAMIC FACADE ZOOM-OUT";
-            } else {
-              badgeTitle.textContent = "X-RAY WIREFRAME BLUEPRINT";
-            }
-          }
         }
       }
     });
 
-    const hideTargets = [textOverlay, badge, scrollInd].filter(Boolean);
+    const hideTargets = [textOverlay, scrollInd].filter(Boolean);
 
-    // Step 1: Fade OUT text & overlays as scroll begins (0.00 -> 0.08 progress)
+    // Step 1: Fade OUT text & scroll indicator as scroll begins (0.00 -> 0.08 progress)
     mainTl.to(hideTargets, {
       opacity: 0,
       y: -30,
@@ -573,76 +553,7 @@ function initStudioClocks() {
 }
 
 /* --------------------------------------------------------------------------
-   9. WEB AUDIO API AMBIENT SOUNDSCAPE SYNTHESIZER
-   -------------------------------------------------------------------------- */
-function initAmbientAudio() {
-  const audioBtn = document.getElementById('audioToggle');
-  if (!audioBtn) return;
-
-  let audioCtx = null;
-  let isPlaying = false;
-  let osc1, osc2, gainNode;
-
-  audioBtn.addEventListener('click', () => {
-    if (!isPlaying) {
-      startAmbientSound();
-      audioBtn.classList.add('playing');
-      isPlaying = true;
-    } else {
-      stopAmbientSound();
-      audioBtn.classList.remove('playing');
-      isPlaying = false;
-    }
-  });
-
-  function startAmbientSound() {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      audioCtx = new AudioContext();
-
-      osc1 = audioCtx.createOscillator();
-      osc2 = audioCtx.createOscillator();
-      gainNode = audioCtx.createGain();
-
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(320, audioCtx.currentTime);
-
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(110, audioCtx.currentTime);
-
-      osc2.type = 'triangle';
-      osc2.frequency.setValueAtTime(164.81, audioCtx.currentTime);
-
-      gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 3);
-
-      osc1.connect(filter);
-      osc2.connect(filter);
-      filter.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      osc1.start();
-      osc2.start();
-    } catch (e) {
-      console.log('Web Audio API not supported on browser');
-    }
-  }
-
-  function stopAmbientSound() {
-    if (gainNode && audioCtx) {
-      gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
-      setTimeout(() => {
-        if (osc1) osc1.stop();
-        if (osc2) osc2.stop();
-        if (audioCtx) audioCtx.close();
-      }, 1000);
-    }
-  }
-}
-
-/* --------------------------------------------------------------------------
-   10. CONTACT FORM & SERVICE MODALS
+   9. CONTACT FORM & SERVICE MODALS
    -------------------------------------------------------------------------- */
 function initContactForm() {
   const form = document.getElementById('contactForm');
