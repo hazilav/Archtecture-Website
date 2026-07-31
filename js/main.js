@@ -84,10 +84,10 @@ function init260FrameCanvasHero() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Full-screen fit ratio so the entire building frame is visible without cropping/zooming in
+    // Full screen cover ratio for rich architectural presentation
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
-    const ratio = Math.min(hRatio, vRatio);
+    const ratio = Math.max(hRatio, vRatio);
     const centerShift_x = (canvas.width - img.width * ratio) / 2;
     const centerShift_y = (canvas.height - img.height * ratio) / 2;
 
@@ -178,11 +178,8 @@ function init260FrameCanvasHero() {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // GSAP 260-Frame Scrubbing Timeline
-    gsap.to(seq, {
-      frame: frameCount - 1,
-      snap: "frame",
-      ease: "none",
+    // Master Timeline: Text disappears on scroll start -> 260 frames scrub -> Text reappears at end -> Scrolls to next section
+    const mainTl = gsap.timeline({
       scrollTrigger: {
         trigger: "#heroPinSection",
         start: "top top",
@@ -212,22 +209,34 @@ function init260FrameCanvasHero() {
       }
     });
 
-    // Fade out text overlay, frame badge indicator, and mouse scroll icon on initial scroll
     const hideTargets = [textOverlay, badge, scrollInd].filter(Boolean);
 
-    if (hideTargets.length) {
-      gsap.to(hideTargets, {
-        opacity: 0,
-        y: -30,
-        pointerEvents: "none",
-        ease: "power1.inOut",
-        scrollTrigger: {
-          trigger: "#heroPinSection",
-          start: "top top",
-          end: "+=20%",
-          scrub: true
-        }
-      });
+    // Step 1: Fade OUT text & overlays as scroll begins (0.00 -> 0.08 progress)
+    mainTl.to(hideTargets, {
+      opacity: 0,
+      y: -30,
+      pointerEvents: "none",
+      duration: 0.08,
+      ease: "power1.inOut"
+    }, 0);
+
+    // Step 2: Scrub 260 animation frames across main scroll distance (0.05 -> 0.90 progress)
+    mainTl.to(seq, {
+      frame: frameCount - 1,
+      snap: "frame",
+      duration: 0.85,
+      ease: "none"
+    }, 0.05);
+
+    // Step 3: Fade text overlay BACK IN as 260-frame animation completes (0.90 -> 1.00 progress)
+    if (textOverlay) {
+      mainTl.to(textOverlay, {
+        opacity: 1,
+        y: 0,
+        pointerEvents: "auto",
+        duration: 0.10,
+        ease: "power1.inOut"
+      }, 0.90);
     }
 
     setTimeout(() => {
