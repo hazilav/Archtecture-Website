@@ -1,5 +1,5 @@
 /* ==========================================================================
-   AETHER VISUALS - ARCHITECTURE ANIMATION & VISUALIZATION STUDIO
+   ARCHTECTURE - ARCHITECTURE ANIMATION & VISUALIZATION STUDIO
    GSAP 260-FRAME CANVAS SCROLL-TRIGGERED SCRUBBING ENGINE
    ========================================================================== */
 
