@@ -162,7 +162,7 @@ img {
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 800;
-  letter-spacing: 4px;
+  letter-spacing: normal;
   margin-bottom: 1.8rem;
   color: var(--text-main);
 }
@@ -244,7 +244,7 @@ img {
   font-family: var(--font-heading);
   font-size: 1.3rem;
   font-weight: 800;
-  letter-spacing: 3px;
+  letter-spacing: normal;
 }
 
 .brand-tag {
@@ -252,7 +252,7 @@ img {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--text-muted);
-  letter-spacing: 1px;
+  letter-spacing: normal;
 }
 
 .availability-pill {
@@ -570,7 +570,7 @@ img {
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--color-gold-light);
-  letter-spacing: 2px;
+  letter-spacing: normal;
 }
 
 .hero-title {
@@ -578,7 +578,7 @@ img {
   font-size: clamp(2.8rem, 6vw, 5.2rem);
   font-weight: 800;
   line-height: 1.05;
-  letter-spacing: -1px;
+  letter-spacing: normal;
   margin-bottom: 1.5rem;
   text-transform: uppercase;
 }
@@ -587,6 +587,7 @@ img {
   font-size: clamp(1rem, 1.5vw, 1.25rem);
   color: var(--text-muted);
   line-height: 1.7;
+  letter-spacing: normal;
   max-width: 680px;
   margin-bottom: 2.5rem;
 }
