@@ -1857,6 +1857,20 @@ img {
   background: rgba(212, 175, 55, 0.1);
 }
 
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.nav-contact-btn {
+  margin-left: 1.2rem;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  padding: 0.65rem 1.6rem;
+}
+
 .legal-tag {
   display: block;
   font-family: var(--font-mono);
