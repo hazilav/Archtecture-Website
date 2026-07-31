@@ -31,6 +31,7 @@ function init260FrameCanvasHero() {
   const percentText = document.getElementById('loaderPercent');
   const statusText = document.getElementById('statusText');
   const canvas = document.getElementById('heroCanvas');
+  const navbar = document.getElementById('navbar');
   const textOverlay = document.getElementById('heroTextOverlay');
   const scrollInd = document.getElementById('heroScrollIndicator');
 
@@ -174,7 +175,7 @@ function init260FrameCanvasHero() {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Master Timeline: Text disappears on scroll start -> 260 frames scrub -> Text reappears at end -> Scrolls to next section
+    // Master Timeline: Navbar & Text disappear on scroll start -> 260 frames scrub -> Navbar & Text reappear at end -> Scrolls to next section
     const mainTl = gsap.timeline({
       scrollTrigger: {
         trigger: "#heroPinSection",
@@ -189,9 +190,10 @@ function init260FrameCanvasHero() {
       }
     });
 
-    const hideTargets = [textOverlay, scrollInd].filter(Boolean);
+    const hideTargets = [navbar, textOverlay, scrollInd].filter(Boolean);
+    const showTargets = [navbar, textOverlay].filter(Boolean);
 
-    // Step 1: Fade OUT text & scroll indicator as scroll begins (0.00 -> 0.08 progress)
+    // Step 1: Fade OUT navbar header, text & scroll indicator as scroll begins (0.00 -> 0.08 progress)
     mainTl.to(hideTargets, {
       opacity: 0,
       y: -30,
@@ -208,9 +210,9 @@ function init260FrameCanvasHero() {
       ease: "none"
     }, 0.05);
 
-    // Step 3: Fade text overlay BACK IN as 260-frame animation completes (0.90 -> 1.00 progress)
-    if (textOverlay) {
-      mainTl.to(textOverlay, {
+    // Step 3: Fade navbar header & text overlay BACK IN as 260-frame animation completes (0.90 -> 1.00 progress)
+    if (showTargets.length) {
+      mainTl.to(showTargets, {
         opacity: 1,
         y: 0,
         pointerEvents: "auto",
