@@ -44,7 +44,7 @@
           <div class="loader-bar-fill" id="loaderFill"></div>
         </div>
         <div class="loader-meta">
-          <span class="status-text" id="statusText">PRELOADING KEY ARCHITECTURAL RENDERS...</span>
+          <span class="status-text" id="statusText">PRELOADING 260 HIGH-RES ARCHITECTURAL FRAMES...</span>
           <span class="percentage" id="loaderPercent">0%</span>
         </div>
       </div>
@@ -127,26 +127,14 @@
 
   <main>
     <!-- ==========================================================================
-         SCROLL-TRIGGERED 4-IMAGE HERO SECTION (GSAP Pinned Crossfade Timeline)
+         260-FRAME CANVAS HERO SECTION (GSAP Pinned Frame-Scrubbing Animation)
          ========================================================================== -->
     <section id="heroPinSection" class="hero-pin-section">
-      <!-- Stacked 4 Key Images Container -->
-      <div class="hero-images-stack" id="heroImageStack">
-        <!-- Image 1: Building Exterior Wide Shot -->
-        <img src="./assets/images/image_1.png" alt="Building Exterior Facade" class="hero-scroll-img hero-img-1" id="heroImg1" loading="eager">
-        
-        <!-- Image 2: Exploded Architectural Cutaway -->
-        <img src="./assets/images/image_2.png" alt="Exploded Architectural Cutaway" class="hero-scroll-img hero-img-2" id="heroImg2" loading="eager">
-        
-        <!-- Image 3: Building Exterior Zoomed Out -->
-        <img src="./assets/images/image_3.png" alt="Building Exterior Zoomed Out" class="hero-scroll-img hero-img-3" id="heroImg3" loading="eager">
-        
-        <!-- Image 4: Architectural X-Ray Wireframe -->
-        <img src="./assets/images/image_4.png" alt="Architectural X-Ray Wireframe Blueprint" class="hero-scroll-img hero-img-4" id="heroImg4" loading="eager">
+      <!-- 260-Frame Ultra-Smooth HTML5 Canvas -->
+      <canvas id="heroCanvas" class="hero-scroll-canvas"></canvas>
 
-        <div class="hero-gradient-overlay"></div>
-        <div class="architectural-grid-overlay"></div>
-      </div>
+      <div class="hero-gradient-overlay"></div>
+      <div class="architectural-grid-overlay"></div>
 
       <!-- Hero Overlaid Content -->
       <div class="hero-content-container container">
@@ -155,7 +143,7 @@
         <div class="hero-text-overlay" id="heroTextOverlay">
           <div class="hero-badge">
             <span class="badge-icon"><i class="ri-film-line"></i></span>
-            <span class="badge-text">CINEMATIC 3D ARCHITECTURAL VISUALIZATION</span>
+            <span class="badge-text">260-FRAME CINEMATIC 3D ARCHITECTURAL ANIMATION</span>
           </div>
 
           <h1 class="hero-title">
@@ -180,10 +168,10 @@
           </div>
         </div>
 
-        <!-- Layer Status Badge Indicator -->
+        <!-- Frame Progress Status Badge Indicator -->
         <div class="hero-layer-badge" id="heroLayerBadge">
-          <span class="badge-num" id="badgeNum">01 / 04</span>
-          <span class="badge-title" id="badgeTitle">BUILDING EXTERIOR FACADE</span>
+          <span class="badge-num" id="badgeNum">FRAME 001 / 260</span>
+          <span class="badge-title" id="badgeTitle">EXTERIOR FACADE ANATOMY</span>
         </div>
 
         <!-- Scroll Indicator -->
@@ -191,7 +179,7 @@
           <div class="mouse-icon">
             <div class="wheel"></div>
           </div>
-          <span class="scroll-text">SCROLL TO CROSSFADE ARCHITECTURAL VIEWS</span>
+          <span class="scroll-text">SCROLL TO SCRUB 260 ANIMATION FRAMES</span>
         </div>
 
       </div>

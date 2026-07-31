@@ -1,12 +1,11 @@
 /* ==========================================================================
    AETHER VISUALS - ARCHITECTURE ANIMATION & VISUALIZATION STUDIO
-   GSAP 4-IMAGE SCROLL-TRIGGERED CROSSFADE HERO SEQUENCER
+   GSAP 260-FRAME CANVAS SCROLL-TRIGGERED SCRUBBING ENGINE
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initBlueprintLoader();
+  init260FrameCanvasHero();
   initNavbar();
-  init4ImageHeroSequence();
   initBeforeAfterSlider();
   initPortfolioFilter();
   initProjectEstimator();
@@ -25,231 +24,160 @@ window.addEventListener('load', () => {
 });
 
 /* --------------------------------------------------------------------------
-   1. ARCHITECTURAL BLUEPRINT LOADER
+   1. 260-FRAME HTML5 CANVAS HERO SCROLL-SCRUBBING ENGINE
    -------------------------------------------------------------------------- */
-function initBlueprintLoader() {
+function init260FrameCanvasHero() {
   const loader = document.getElementById('blueprintLoader');
   const fill = document.getElementById('loaderFill');
   const percentText = document.getElementById('loaderPercent');
   const statusText = document.getElementById('statusText');
-  const canvas = document.getElementById('blueprintCanvas');
-  if (!canvas || !loader) return;
-
-  const ctx = canvas.getContext('2d');
-  let progress = 0;
-
-  const statusMessages = [
-    "LOADING ARCHITECTURAL RENDERS...",
-    "SYNCHRONIZING GSAP SCROLLTRIGGER TIMELINE...",
-    "BUILDING PINNED CROSSFADE ENGINE...",
-    "CONFIGURING SCALE TRANSITIONS...",
-    "READY FOR ARCHITECTURAL VISUALIZATION..."
-  ];
-
-  function drawBlueprint(prog) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.strokeStyle = 'rgba(212, 175, 55, 0.15)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < canvas.width; x += 20) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, canvas.height);
-      ctx.stroke();
-    }
-    for (let y = 0; y < canvas.height; y += 20) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(canvas.width, y);
-      ctx.stroke();
-    }
-
-    const maxLines = Math.floor((prog / 100) * 12);
-    ctx.strokeStyle = '#D4AF37';
-    ctx.lineWidth = 1.8;
-
-    if (prog > 5) {
-      ctx.beginPath();
-      ctx.rect(90, 40, 120, 140);
-      ctx.stroke();
-    }
-    for (let i = 0; i < maxLines; i++) {
-      const y = 170 - (i * 10);
-      ctx.beginPath();
-      ctx.moveTo(90, y);
-      ctx.lineTo(210, y);
-      ctx.stroke();
-
-      for (let x = 105; x < 200; x += 20) {
-        ctx.fillStyle = (i % 2 === 0) ? '#F5D77F' : 'rgba(212, 175, 55, 0.4)';
-        ctx.fillRect(x, y - 6, 8, 4);
-      }
-    }
-    if (prog > 80) {
-      ctx.beginPath();
-      ctx.moveTo(150, 40);
-      ctx.lineTo(150, 10);
-      ctx.stroke();
-    }
-  }
-
-  const interval = setInterval(() => {
-    progress += Math.floor(Math.random() * 6) + 4;
-    if (progress > 100) progress = 100;
-
-    fill.style.width = `${progress}%`;
-    percentText.textContent = `${progress}%`;
-
-    const statusIndex = Math.min(Math.floor((progress / 100) * statusMessages.length), statusMessages.length - 1);
-    statusText.textContent = statusMessages[statusIndex];
-
-    drawBlueprint(progress);
-
-    if (progress >= 100) {
-      clearInterval(interval);
-      setTimeout(() => {
-        loader.classList.add('loaded');
-      }, 300);
-    }
-  }, 20);
-}
-
-/* --------------------------------------------------------------------------
-   2. GSAP 4-IMAGE PINNED HERO CROSSFADE SEQUENCER (With Auto-Retry for CDN)
-   -------------------------------------------------------------------------- */
-function init4ImageHeroSequence() {
-  const heroPinSection = document.getElementById('heroPinSection');
-  const img1 = document.getElementById('heroImg1');
-  const img2 = document.getElementById('heroImg2');
-  const img3 = document.getElementById('heroImg3');
-  const img4 = document.getElementById('heroImg4');
+  const canvas = document.getElementById('heroCanvas');
   const textOverlay = document.getElementById('heroTextOverlay');
   const badgeNum = document.getElementById('badgeNum');
   const badgeTitle = document.getElementById('badgeTitle');
 
-  if (!heroPinSection) return;
+  if (!canvas) return;
 
-  function runTimelineSetup() {
+  const ctx = canvas.getContext('2d');
+  const frameCount = 260;
+  const images = [];
+  const seq = { frame: 0 };
+  let imagesLoaded = 0;
+
+  function currentFramePath(index) {
+    return `./assets/images/ezgif-frame-${String(index + 1).padStart(3, '0')}.png`;
+  }
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    renderFrame(Math.floor(seq.frame));
+  }
+
+  function renderFrame(index) {
+    const img = images[index];
+    if (!img || !img.complete) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Calculate aspect-ratio cover crop
+    const hRatio = canvas.width / img.width;
+    const vRatio = canvas.height / img.height;
+    const ratio = Math.max(hRatio, vRatio);
+    const centerShift_x = (canvas.width - img.width * ratio) / 2;
+    const centerShift_y = (canvas.height - img.height * ratio) / 2;
+
+    ctx.drawImage(
+      img,
+      0, 0, img.width, img.height,
+      centerShift_x, centerShift_y, img.width * ratio, img.height * ratio
+    );
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // Preload 260 High-Res Architectural Frame PNGs
+  for (let i = 0; i < frameCount; i++) {
+    const img = new Image();
+    img.src = currentFramePath(i);
+    img.onload = () => {
+      imagesLoaded++;
+      const progress = Math.round((imagesLoaded / frameCount) * 100);
+      if (fill) fill.style.width = `${progress}%`;
+      if (percentText) percentText.textContent = `${progress}%`;
+      if (statusText && progress % 20 === 0) {
+        statusText.textContent = `PRELOADING FRAME ${imagesLoaded} / ${frameCount}...`;
+      }
+
+      if (imagesLoaded === 1) {
+        renderFrame(0);
+      }
+
+      if (imagesLoaded === frameCount) {
+        if (loader) {
+          setTimeout(() => {
+            loader.classList.add('loaded');
+          }, 300);
+        }
+        setupGSAPScrollScrub();
+      }
+    };
+    img.onerror = () => {
+      imagesLoaded++;
+      if (imagesLoaded === frameCount) {
+        if (loader) loader.classList.add('loaded');
+        setupGSAPScrollScrub();
+      }
+    };
+    images.push(img);
+  }
+
+  function setupGSAPScrollScrub() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-      setTimeout(runTimelineSetup, 50);
+      setTimeout(setupGSAPScrollScrub, 50);
       return;
     }
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Set initial GSAP state
-    gsap.set(img1, { opacity: 1, scale: 1.0 });
-    gsap.set(img2, { opacity: 0, scale: 1.0 });
-    gsap.set(img3, { opacity: 0, scale: 1.0 });
-    gsap.set(img4, { opacity: 0, scale: 1.0 });
-    gsap.set(textOverlay, { opacity: 1, y: 0 });
-
-    // Construct GSAP Pinned Scrub Timeline
-    const tl = gsap.timeline({
+    // GSAP 260-Frame Scrubbing Timeline
+    gsap.to(seq, {
+      frame: frameCount - 1,
+      snap: "frame",
+      ease: "none",
       scrollTrigger: {
         trigger: "#heroPinSection",
         start: "top top",
-        end: "+=300%",
+        end: "+=400%",
         pin: true,
-        scrub: 0.6,
+        scrub: 0.5,
         onUpdate: (self) => {
-          const p = self.progress;
+          const currentIdx = Math.floor(seq.frame);
+          renderFrame(currentIdx);
 
-          // Update Dynamic Layer Badge Title
-          if (p < 0.25) {
-            badgeNum.textContent = "01 / 04";
-            badgeTitle.textContent = "BUILDING EXTERIOR FACADE";
-          } else if (p >= 0.25 && p < 0.50) {
-            badgeNum.textContent = "02 / 04";
-            badgeTitle.textContent = "EXPLODED ARCHITECTURAL CUTAWAY";
-          } else if (p >= 0.50 && p < 0.75) {
-            badgeNum.textContent = "03 / 04";
-            badgeTitle.textContent = "EXTERIOR PANORAMIC VIEW";
-          } else {
-            badgeNum.textContent = "04 / 04";
-            badgeTitle.textContent = "X-RAY WIREFRAME BLUEPRINT";
+          const p = self.progress;
+          const frameNumStr = String(currentIdx + 1).padStart(3, '0');
+          if (badgeNum) badgeNum.textContent = `FRAME ${frameNumStr} / 260`;
+
+          if (badgeTitle) {
+            if (p < 0.25) {
+              badgeTitle.textContent = "EXTERIOR FACADE ANATOMY";
+            } else if (p >= 0.25 && p < 0.50) {
+              badgeTitle.textContent = "EXPLODED ARCHITECTURAL CUTAWAY";
+            } else if (p >= 0.50 && p < 0.75) {
+              badgeTitle.textContent = "PANORAMIC FACADE ZOOM-OUT";
+            } else {
+              badgeTitle.textContent = "X-RAY WIREFRAME BLUEPRINT";
+            }
           }
         }
       }
     });
 
-    // 1. Hero Text Overlay Fade Out (0.00 -> 0.15)
-    tl.to(textOverlay, { 
-      opacity: 0, 
-      y: -40, 
-      duration: 0.15, 
-      ease: "power1.inOut" 
-    }, 0);
-
-    // 2. Image 1 Ken Burns Scale & Crossfade to Image 2 (0.00 -> 0.33)
-    tl.to(img1, { 
-      scale: 1.06, 
-      duration: 0.33, 
-      ease: "none" 
-    }, 0)
-    .to(img2, { 
-      opacity: 1, 
-      scale: 1.03, 
-      duration: 0.25, 
-      ease: "power2.inOut" 
-    }, 0.08)
-    .to(img1, { 
-      opacity: 0, 
-      duration: 0.20, 
-      ease: "power2.inOut" 
-    }, 0.12);
-
-    // 3. Image 2 Ken Burns Scale & Crossfade to Image 3 (0.33 -> 0.66)
-    tl.to(img2, { 
-      scale: 1.06, 
-      duration: 0.33, 
-      ease: "none" 
-    }, 0.33)
-    .to(img3, { 
-      opacity: 1, 
-      scale: 1.03, 
-      duration: 0.25, 
-      ease: "power2.inOut" 
-    }, 0.41)
-    .to(img2, { 
-      opacity: 0, 
-      duration: 0.20, 
-      ease: "power2.inOut" 
-    }, 0.45);
-
-    // 4. Image 3 Ken Burns Scale & Crossfade to Image 4 (0.66 -> 1.00)
-    tl.to(img3, { 
-      scale: 1.06, 
-      duration: 0.33, 
-      ease: "none" 
-    }, 0.66)
-    .to(img4, { 
-      opacity: 1, 
-      scale: 1.03, 
-      duration: 0.25, 
-      ease: "power2.inOut" 
-    }, 0.74)
-    .to(img3, { 
-      opacity: 0, 
-      duration: 0.20, 
-      ease: "power2.inOut" 
-    }, 0.78)
-    .to(img4, { 
-      scale: 1.06, 
-      duration: 0.26, 
-      ease: "none" 
-    }, 0.74);
+    // Fade out text overlay on initial scroll
+    if (textOverlay) {
+      gsap.to(textOverlay, {
+        opacity: 0,
+        y: -40,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: "#heroPinSection",
+          start: "top top",
+          end: "+=40%",
+          scrub: true
+        }
+      });
+    }
 
     setTimeout(() => {
       ScrollTrigger.refresh();
     }, 100);
   }
-
-  runTimelineSetup();
 }
 
 /* --------------------------------------------------------------------------
-   3. STICKY NAVBAR & NAVIGATION
+   2. STICKY NAVBAR & NAVIGATION
    -------------------------------------------------------------------------- */
 function initNavbar() {
   const navbar = document.getElementById('navbar');
@@ -303,7 +231,7 @@ function highlightActiveNav() {
 }
 
 /* --------------------------------------------------------------------------
-   4. INTERACTIVE BEFORE / AFTER SLIDER
+   3. INTERACTIVE BEFORE / AFTER SLIDER
    -------------------------------------------------------------------------- */
 function initBeforeAfterSlider() {
   const container = document.getElementById('beforeAfterSlider');
@@ -354,7 +282,7 @@ function initBeforeAfterSlider() {
 }
 
 /* --------------------------------------------------------------------------
-   5. PORTFOLIO FILTER & LIGHTBOX VIDEO MODAL
+   4. PORTFOLIO FILTER & LIGHTBOX VIDEO MODAL
    -------------------------------------------------------------------------- */
 function initPortfolioFilter() {
   const filterBtns = document.querySelectorAll('.filter-btn');
@@ -380,7 +308,7 @@ function initPortfolioFilter() {
   items.forEach(item => {
     item.addEventListener('click', () => {
       const title = item.getAttribute('data-title') || 'Project Architectural Film';
-      const imgSrc = item.getAttribute('data-img') || './assets/images/image_1.png';
+      const imgSrc = item.getAttribute('data-img') || './assets/images/ezgif-frame-001.png';
       openVideoModal(title, imgSrc);
     });
   });
@@ -404,7 +332,7 @@ function closeVideoModal() {
 }
 
 /* --------------------------------------------------------------------------
-   6. INTERACTIVE PROJECT SCOPE ESTIMATOR
+   5. INTERACTIVE PROJECT SCOPE ESTIMATOR
    -------------------------------------------------------------------------- */
 function initProjectEstimator() {
   const typeBtns = document.querySelectorAll('.option-btn[data-type]');
@@ -486,7 +414,7 @@ function applyEstimateToContact() {
 }
 
 /* --------------------------------------------------------------------------
-   7. TESTIMONIAL CAROUSEL
+   6. TESTIMONIAL CAROUSEL
    -------------------------------------------------------------------------- */
 function initTestimonialSlider() {
   const cards = document.querySelectorAll('.testimonial-card');
@@ -519,7 +447,7 @@ function initTestimonialSlider() {
 }
 
 /* --------------------------------------------------------------------------
-   8. PROCESS TIMELINE SCROLL PROGRESS
+   7. PROCESS TIMELINE SCROLL PROGRESS
    -------------------------------------------------------------------------- */
 function initProcessTimeline() {
   const timelineSection = document.getElementById('process');
@@ -550,7 +478,7 @@ function initProcessTimeline() {
 }
 
 /* --------------------------------------------------------------------------
-   9. WORLD STUDIO CLOCKS
+   8. WORLD STUDIO CLOCKS
    -------------------------------------------------------------------------- */
 function initStudioClocks() {
   const nyClock = document.getElementById('clockNY');
@@ -576,7 +504,7 @@ function initStudioClocks() {
 }
 
 /* --------------------------------------------------------------------------
-   10. WEB AUDIO API AMBIENT SOUNDSCAPE SYNTHESIZER
+   9. WEB AUDIO API AMBIENT SOUNDSCAPE SYNTHESIZER
    -------------------------------------------------------------------------- */
 function initAmbientAudio() {
   const audioBtn = document.getElementById('audioToggle');
@@ -645,7 +573,7 @@ function initAmbientAudio() {
 }
 
 /* --------------------------------------------------------------------------
-   11. CONTACT FORM & SERVICE MODALS
+   10. CONTACT FORM & SERVICE MODALS
    -------------------------------------------------------------------------- */
 function initContactForm() {
   const form = document.getElementById('contactForm');
