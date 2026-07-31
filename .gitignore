@@ -1,0 +1,11 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Scratch / temp build files
+scratch/
+.system_generated/
+assets/images/ezgif-frame-*.png

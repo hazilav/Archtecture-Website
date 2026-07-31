@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AETHER VISUALS | Cinematic Architecture Animation & 3D Visualization Studio</title>
+  <meta name="description" content="AETHER VISUALS is a world-class architecture animation & 3D visualization studio. We craft hyper-realistic architectural walkthroughs, exterior renders, VR experiences, and cinematic films for world-leading architects and developers.">
+  <meta name="keywords" content="architecture animation, 3D architectural visualization, archviz studio, architectural walkthrough, 3D exterior render, real estate film, VR visualization">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>">
+  
+  <!-- Google Fonts: Syne (Bold Architectural Headlines) & Inter (Sleek Modern Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+  
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dark-theme">
+
+  <!-- ==========================================================================
+       ARCHITECTURAL BLUEPRINT LOADER
+       ========================================================================== -->
+  <div class="blueprint-loader" id="blueprintLoader">
+    <div class="loader-content">
+      <div class="loader-logo">
+        <span class="logo-mark">A<span class="gold-accent">V</span></span>
+        <span class="logo-text">AETHER VISUALS</span>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="blueprintCanvas" width="300" height="200"></canvas>
+      </div>
+      <div class="loader-status">
+        <div class="loader-bar-bg">
+          <div class="loader-bar-fill" id="loaderFill"></div>
+        </div>
+        <div class="loader-meta">
+          <span class="status-text" id="statusText">PRELOADING KEY ARCHITECTURAL RENDERS...</span>
+          <span class="percentage" id="loaderPercent">0%</span>
+        </div>
+      </div>
+      <div class="loader-grid-lines"></div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#heroPinSection" class="brand-logo">
+        <div class="logo-symbol">
+          <svg viewBox="0 0 40 40" width="34" height="34">
+            <polygon points="20,4 36,34 4,34" fill="none" stroke="var(--color-gold)" stroke-width="2.5"/>
+            <line x1="20" y1="4" x2="20" y2="34" stroke="var(--color-gold)" stroke-width="1.5" stroke-dasharray="2,2"/>
+            <circle cx="20" cy="18" r="4" fill="var(--color-gold)"/>
+          </svg>
+        </div>
+        <div class="logo-brand-info">
+          <span class="brand-name">AETHER<span class="gold-accent">.</span></span>
+          <span class="brand-tag">ARCHVIZ STUDIO</span>
+        </div>
+      </a>
+
+      <!-- Live Studio Availability Pill -->
+      <div class="availability-pill hide-tablet">
+        <span class="pulse-dot"></span>
+        <span>BOOKING Q3 / Q4 2026</span>
+      </div>
+
+      <nav class="nav-links" id="navMenu">
+        <a href="#heroPinSection" class="nav-item active">Home</a>
+        <a href="#about" class="nav-item">About</a>
+        <a href="#services" class="nav-item">Services</a>
+        <a href="#portfolio" class="nav-item">Portfolio</a>
+        <a href="#process" class="nav-item">Process</a>
+        <a href="#estimator" class="nav-item">Estimator</a>
+        <a href="#contact" class="nav-item">Contact</a>
+      </nav>
+
+      <div class="nav-controls">
+        <!-- Ambient Sound Toggle -->
+        <button class="audio-btn" id="audioToggle" aria-label="Toggle Ambient Audio">
+          <i class="ri-volume-mute-line" id="audioIcon"></i>
+          <span class="audio-waves" id="audioWaves">
+            <span></span><span></span><span></span>
+          </span>
+        </button>
+
+        <a href="#contact" class="btn btn-gold btn-sm hide-mobile">Request Quote</a>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="hamburger-btn" id="mobileToggle" aria-label="Toggle Mobile Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Overlay Navigation -->
+  <div class="mobile-nav-overlay" id="mobileOverlay">
+    <div class="mobile-nav-content">
+      <a href="#heroPinSection" class="mobile-link">Home</a>
+      <a href="#about" class="mobile-link">About</a>
+      <a href="#services" class="mobile-link">Services</a>
+      <a href="#portfolio" class="mobile-link">Portfolio</a>
+      <a href="#process" class="mobile-link">Process</a>
+      <a href="#estimator" class="mobile-link">Budget Estimator</a>
+      <a href="#contact" class="mobile-link">Contact Studio</a>
+      <div class="mobile-cta-box">
+        <a href="#contact" class="btn btn-gold btn-block">Start Project Inquiry</a>
+        <p class="mobile-email">contact@aether-visuals.com</p>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- ==========================================================================
+         SCROLL-TRIGGERED 260-FRAME 3D ARCHITECTURAL CANVAS HERO ANIMATION ENGINE
+         ========================================================================== -->
+    <section id="heroPinSection" class="hero-pin-section">
+      <!-- 260-Frame Dynamic 3D Architecture Canvas -->
+      <div class="hero-images-stack" id="heroImageStack">
+        <canvas id="heroCanvas" class="hero-canvas"></canvas>
+        <div class="hero-gradient-overlay"></div>
+        <div class="architectural-grid-overlay"></div>
+      </div>
+
+      <!-- Hero Overlaid Content -->
+      <div class="hero-content-container container">
+        
+        <!-- Hero Text Overlay (Fades out smoothly on scroll) -->
+        <div class="hero-text-overlay" id="heroTextOverlay">
+          <div class="hero-badge">
+            <span class="badge-icon"><i class="ri-film-line"></i></span>
+            <span class="badge-text">CINEMATIC 3D ARCHITECTURAL VISUALIZATION</span>
+          </div>
+
+          <h1 class="hero-title">
+            BRINGING <br>
+            <span class="text-gold-gradient">STRUCTURES</span> <br>
+            TO LIFE<span class="gold-dot">.</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            We transform raw blueprints and CAD geometry into hyper-realistic 8K animations, spatial walkthroughs, and cinematic films for visionary architects and luxury developers worldwide.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#portfolio" class="btn btn-gold btn-lg">
+              <span>Explore Showreel</span>
+              <i class="ri-play-circle-fill"></i>
+            </a>
+            <a href="#estimator" class="btn btn-glass btn-lg">
+              <span>Estimate Project</span>
+              <i class="ri-calculator-line"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Architectural Sequence HUD Status & Controls -->
+        <div class="hero-layer-badge" id="heroLayerBadge">
+          <span class="badge-num" id="badgeNum">001 / 260</span>
+          <span class="badge-title" id="badgeTitle">CAM 01 // EXTERIOR APPROACH</span>
+          <button class="hero-autoplay-btn" id="heroAutoplayBtn" aria-label="Toggle 360 Auto-Spin">
+            <i class="ri-play-fill" id="autoplayIcon"></i>
+            <span class="autoplay-text">360° SPIN</span>
+          </button>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator" id="heroScrollIndicator">
+          <div class="mouse-icon">
+            <div class="wheel"></div>
+          </div>
+          <span class="scroll-text">SCROLL TO ROTATE & EXPLORE 3D ARCHITECTURE</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         ABOUT SECTION & INTERACTIVE BEFORE/AFTER SLIDER
+         ========================================================================== -->
+    <section id="about" class="about-section section-padding">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-tag"><i class="ri-compass-3-line"></i> ARCHITECTURAL DISCIPLINE & ARTISTRY</span>
+          <h2 class="section-title">Bridging Physics with Cinematic Motion<span class="gold-accent">.</span></h2>
+          <p class="section-description">
+            Founded by a collective of architects and CGI directors, AETHER VISUALS merges spatial design rigor with Hollywood-grade lighting, camera composition, and real-time volumetric atmospherics.
+          </p>
+        </div>
+
+        <!-- Interactive Before/After Wireframe vs Render Slider -->
+        <div class="comparison-wrapper">
+          <div class="comparison-header">
+            <span class="label-left"><i class="ri-draft-line"></i> 3D CAD BLUEPRINT WIREFRAME</span>
+            <span class="label-right">8K PHOTOREALISTIC RENDER <i class="ri-sparkles-line"></i></span>
+          </div>
+
+          <div class="before-after-container" id="beforeAfterSlider">
+            <!-- Background: Rendered image -->
+            <img src="assets/images/rendered.jpg" alt="Photorealistic Architectural Render" class="image-rendered">
+
+            <!-- Foreground: Wireframe image clipped -->
+            <div class="wireframe-clip-wrapper" id="wireframeClip">
+              <img src="assets/images/wireframe.jpg" alt="Architectural Blueprint Wireframe" class="image-wireframe">
+            </div>
+
+            <!-- Drag Handle Bar -->
+            <div class="slider-handle" id="sliderHandle">
+              <div class="handle-line"></div>
+              <div class="handle-circle">
+                <i class="ri-arrow-left-s-line"></i>
+                <i class="ri-arrow-right-s-line"></i>
+              </div>
+              <div class="handle-line"></div>
+            </div>
+          </div>
+          <p class="slider-hint"><i class="ri-hand-coin-line"></i> Drag the divider to compare raw 3D geometry with our final raytraced lighting</p>
+        </div>
+
+        <!-- Studio Highlights Grid -->
+        <div class="highlights-grid">
+          <div class="highlight-card">
+            <div class="card-icon"><i class="ri-lightbulb-flash-line"></i></div>
+            <h3>Physically Accurate Lighting</h3>
+            <p>Every solar path, HDRI daylight shift, and interior fixture is calculated using true photometric IES profiles for absolute real-world accuracy.</p>
+          </div>
+          <div class="highlight-card">
+            <div class="card-icon"><i class="ri-camera-lens-line"></i></div>
+            <h3>Anamorphic Cinema Lenses</h3>
+            <p>We craft camera choreographies with cinematic lens distortion, rack focus, and motion blur that evoke emotional resonance for investors.</p>
+          </div>
+          <div class="highlight-card">
+            <div class="card-icon"><i class="ri-cpu-line"></i></div>
+            <h3>Unreal Engine 5 & Raytracing</h3>
+            <p>Leveraging Lumen, Nanite, and high-performance render farm farms to deliver ultra-high-definition output at unmatched speeds.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SERVICES SECTION
+         ========================================================================== -->
+    <section id="services" class="services-section section-padding bg-charcoal">
+      <div class="container">
+        <div class="section-header flex-header">
+          <div>
+            <span class="section-tag"><i class="ri-stack-line"></i> OUR CAPABILITIES</span>
+            <h2 class="section-title">Comprehensive ArchViz Services<span class="gold-accent">.</span></h2>
+          </div>
+          <p class="header-lead">
+            Tailored visual solutions crafted for luxury residential estates, commercial skyscrapers, cultural landmarks, and urban masterplans.
+          </p>
+        </div>
+
+        <div class="services-grid">
+          <!-- Service Card 1 -->
+          <div class="service-card" data-service="1">
+            <div class="service-number">01</div>
+            <div class="service-icon"><i class="ri-walk-line"></i></div>
+            <h3 class="service-title">3D Architectural Walkthroughs</h3>
+            <p class="service-desc">Immersive spatial journeys that guide viewers through interior layouts, spatial transitions, and custom material finishes with fluid camera work.</p>
+            <ul class="service-features">
+              <li><i class="ri-check-line"></i> 4K & 8K 60FPS Video Output</li>
+              <li><i class="ri-check-line"></i> Custom Sound Design & Music Scoring</li>
+            </ul>
+            <button class="service-link-btn" onclick="openServiceModal(1)">
+              <span>Explore Details</span>
+              <i class="ri-arrow-right-up-line"></i>
+            </button>
+          </div>
+
+          <!-- Service Card 2 -->
+          <div class="service-card" data-service="2">
+            <div class="service-number">02</div>
+            <div class="service-icon"><i class="ri-building-4-line"></i></div>
+            <h3 class="service-title">Exterior Photorealistic Renders</h3>
+            <p class="service-desc">High-impact still imagery captures exterior facades, glass reflections, dusk illuminations, and contextual landscape integration.</p>
+            <ul class="service-features">
+              <li><i class="ri-check-line"></i> Dawn, Twilight & Night Atmospheres</li>
+              <li><i class="ri-check-line"></i> Print-Ready 12K Resolution Stills</li>
+            </ul>
+            <button class="service-link-btn" onclick="openServiceModal(2)">
+              <span>Explore Details</span>
+              <i class="ri-arrow-right-up-line"></i>
+            </button>
+          </div>
+
+          <!-- Service Card 3 -->
+          <div class="service-card" data-service="3">
+            <div class="service-number">03</div>
+            <div class="service-icon"><i class="ri-sofa-line"></i></div>
+            <h3 class="service-title">Interior Fly-Throughs</h3>
+            <p class="service-desc">Detailed interior architectural films showcasing millwork, furniture textures, soft furnishings, and daylight moods with tactile intimacy.</p>
+            <ul class="service-features">
+              <li><i class="ri-check-line"></i> Custom Furniture & Material Shaders</li>
+              <li><i class="ri-check-line"></i> Photometric Artificial Lighting</li>
+            </ul>
+            <button class="service-link-btn" onclick="openServiceModal(3)">
+              <span>Explore Details</span>
+              <i class="ri-arrow-right-up-line"></i>
+            </button>
+          </div>
+
+          <!-- Service Card 4 -->
+          <div class="service-card" data-service="4">
+            <div class="service-number">04</div>
+            <div class="service-icon"><i class="ri-headset-line"></i></div>
+            <h3 class="service-title">VR / AR Real-Time Walkthroughs</h3>
+            <p class="service-desc">Interactive real-time 3D walkthroughs powered by Unreal Engine 5. Clients can walk through spaces, swap materials, and tweak lighting instantly.</p>
+            <ul class="service-features">
+              <li><i class="ri-check-line"></i> Meta Quest & WebXR Compatible</li>
+              <li><i class="ri-check-line"></i> Real-time Material & Furniture Swapping</li>
+            </ul>
+            <button class="service-link-btn" onclick="openServiceModal(4)">
+              <span>Explore Details</span>
+              <i class="ri-arrow-right-up-line"></i>
+            </button>
+          </div>
+
+          <!-- Service Card 5 -->
+          <div class="service-card" data-service="5">
+            <div class="service-number">05</div>
+            <div class="service-icon"><i class="ri-flight-takeoff-line"></i></div>
+            <h3 class="service-title">Drone-Style Flyover Films</h3>
+            <p class="service-desc">Seamless combination of drone aerial footage with 3D photogrammetry and CGI building overlays to depict scale and surrounding cityscapes.</p>
+            <ul class="service-features">
+              <li><i class="ri-check-line"></i> 3D Camera Tracking & Matchmoving</li>
+              <li><i class="ri-check-line"></i> Urban Context Masterplan Integration</li>
+            </ul>
+            <button class="service-link-btn" onclick="openServiceModal(5)">
+              <span>Explore Details</span>
+              <i class="ri-arrow-right-up-line"></i>
+            </button>
+          </div>
+
+          <!-- Service Card 6 -->
+          <div class="service-card" data-service="6">
+            <div class="service-number">06</div>
+            <div class="service-icon"><i class="ri-film-fill"></i></div>
+            <h3 class="service-title">Real Estate Animation Films</h3>
+            <p class="service-desc">Turnkey promotional films complete with motion graphics, voiceover, branded titles, and ambient soundtrack designed for sales launches.</p>
+            <ul class="service-features">
+              <li><i class="ri-check-line"></i> Full Storyboard & Scriptwriting</li>
+              <li><i class="ri-check-line"></i> Marketing Launch Ready Packages</li>
+            </ul>
+            <button class="service-link-btn" onclick="openServiceModal(6)">
+              <span>Explore Details</span>
+              <i class="ri-arrow-right-up-line"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         PORTFOLIO / SHOWREEL SECTION
+         ========================================================================== -->
+    <section id="portfolio" class="portfolio-section section-padding">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-tag"><i class="ri-gallery-line"></i> SHOWCASE GALLERY</span>
+          <h2 class="section-title">Selected Architectural Works<span class="gold-accent">.</span></h2>
+          <p class="section-description">
+            Explore our curated portfolio of award-winning architectural films, high-rise visualizations, and luxury residence walkthroughs.
+          </p>
+
+          <!-- Category Filter Buttons -->
+          <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">All Projects</button>
+            <button class="filter-btn" data-filter="residential">Residential</button>
+            <button class="filter-btn" data-filter="commercial">Commercial</button>
+            <button class="filter-btn" data-filter="urban">Urban Planning</button>
+            <button class="filter-btn" data-filter="interiors">Interiors</button>
+          </div>
+        </div>
+
+        <!-- Portfolio Masonry Grid -->
+        <div class="portfolio-grid" id="portfolioGrid">
+
+          <!-- Item 1: Commercial Skyscraper -->
+          <div class="portfolio-item commercial" data-category="commercial" data-title="Horizon Tower & Sky Gardens" data-location="Dubai, UAE" data-year="2026" data-img="assets/images/project1.jpg">
+            <div class="portfolio-card">
+              <div class="card-media">
+                <img src="assets/images/project1.jpg" alt="Horizon Tower Archviz Render" loading="lazy">
+                <div class="media-overlay"></div>
+                <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
+              </div>
+              <div class="card-info">
+                <div class="card-meta">
+                  <span class="project-cat">Commercial Masterplan</span>
+                  <span class="project-year">2026</span>
+                </div>
+                <h3 class="project-title">Horizon Tower & Sky Gardens</h3>
+                <p class="project-location"><i class="ri-map-pin-line"></i> Dubai, UAE &bull; Foster & Partners Concept</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2: Residential Villa -->
+          <div class="portfolio-item residential" data-category="residential" data-title="Villa Lumina Cliffside Retreat" data-location="Amalfi Coast, Italy" data-year="2026" data-img="assets/images/rendered.jpg">
+            <div class="portfolio-card">
+              <div class="card-media">
+                <img src="assets/images/rendered.jpg" alt="Villa Lumina Render" loading="lazy">
+                <div class="media-overlay"></div>
+                <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
+              </div>
+              <div class="card-info">
+                <div class="card-meta">
+                  <span class="project-cat">Luxury Residential</span>
+                  <span class="project-year">2026</span>
+                </div>
+                <h3 class="project-title">Villa Lumina Cliffside Retreat</h3>
+                <p class="project-location"><i class="ri-map-pin-line"></i> Amalfi Coast, Italy &bull; Studio Studio Architect</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3: Luxury Interior Penthouse -->
+          <div class="portfolio-item interiors" data-category="interiors" data-title="Sanctuary Penthouse Suite" data-location="New York, USA" data-year="2025" data-img="assets/images/project2.jpg">
+            <div class="portfolio-card">
+              <div class="card-media">
+                <img src="assets/images/project2.jpg" alt="Penthouse Suite Interior Render" loading="lazy">
+                <div class="media-overlay"></div>
+                <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
+              </div>
+              <div class="card-info">
+                <div class="card-meta">
+                  <span class="project-cat">Luxury Interior</span>
+                  <span class="project-year">2025</span>
+                </div>
+                <h3 class="project-title">Sanctuary Penthouse Suite</h3>
+                <p class="project-location"><i class="ri-map-pin-line"></i> Manhattan, NY &bull; Studio B</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 4: Urban Museum Pavilion -->
+          <div class="portfolio-item urban" data-category="urban" data-title="Neo-Civic Cultural Center" data-location="Tokyo, Japan" data-year="2026" data-img="assets/images/project3.jpg">
+            <div class="portfolio-card">
+              <div class="card-media">
+                <img src="assets/images/project3.jpg" alt="Neo-Civic Cultural Center Render" loading="lazy">
+                <div class="media-overlay"></div>
+                <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
+              </div>
+              <div class="card-info">
+                <div class="card-meta">
+                  <span class="project-cat">Urban Masterplan</span>
+                  <span class="project-year">2026</span>
+                </div>
+                <h3 class="project-title">Neo-Civic Cultural Center</h3>
+                <p class="project-location"><i class="ri-map-pin-line"></i> Tokyo, Japan &bull; Kengo Kuma Associates</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 5: Drone Coastal Masterplan -->
+          <div class="portfolio-item residential" data-category="residential" data-title="Aura Coastal Resort & Villas" data-location="Maldives" data-year="2025" data-img="assets/images/project4.jpg">
+            <div class="portfolio-card">
+              <div class="card-media">
+                <img src="assets/images/project4.jpg" alt="Aura Coastal Resort Render" loading="lazy">
+                <div class="media-overlay"></div>
+                <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
+              </div>
+              <div class="card-info">
+                <div class="card-meta">
+                  <span class="project-cat">Coastal Masterplan</span>
+                  <span class="project-year">2025</span>
+                </div>
+                <h3 class="project-title">Aura Coastal Resort & Villas</h3>
+                <p class="project-location"><i class="ri-map-pin-line"></i> Maldives &bull; Zaha Hadid Architects</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 6: Hero Skyscraper Landmark -->
+          <div class="portfolio-item commercial" data-category="commercial" data-title="Zenith Financial Plaza" data-location="London, UK" data-year="2026" data-img="assets/images/hero.jpg">
+            <div class="portfolio-card">
+              <div class="card-media">
+                <img src="assets/images/hero.jpg" alt="Zenith Financial Plaza Render" loading="lazy">
+                <div class="media-overlay"></div>
+                <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
+              </div>
+              <div class="card-info">
+                <div class="card-meta">
+                  <span class="project-cat">Commercial Landmark</span>
+                  <span class="project-year">2026</span>
+                </div>
+                <h3 class="project-title">Zenith Financial Plaza</h3>
+                <p class="project-location"><i class="ri-map-pin-line"></i> London, UK &bull; BIG Ingels Group</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         PROCESS TIMELINE SECTION
+         ========================================================================== -->
+    <section id="process" class="process-section section-padding bg-charcoal">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-tag"><i class="ri-timeline-line"></i> METHODOLOGY</span>
+          <h2 class="section-title">The 5-Step Architectural Timeline<span class="gold-accent">.</span></h2>
+          <p class="section-description">
+            From initial CAD vector ingestion to final 8K color-graded films, our structured workflow ensures absolute precision at every milestone.
+          </p>
+        </div>
+
+        <div class="timeline-container">
+          <div class="timeline-line">
+            <div class="timeline-progress-bar" id="timelineProgressBar"></div>
+          </div>
+
+          <!-- Step 1 -->
+          <div class="timeline-step" data-step="1">
+            <div class="step-marker">01</div>
+            <div class="step-content">
+              <div class="step-badge">STAGE 01</div>
+              <h3>CAD / BIM Data Ingestion</h3>
+              <p>We receive Revit, ArchiCAD, Rhino, or AutoCAD files. We audit geometry, sanitize polygon layers, and align coordinates for 3D staging.</p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="timeline-step" data-step="2">
+            <div class="step-marker">02</div>
+            <div class="step-content">
+              <div class="step-badge">STAGE 02</div>
+              <h3>3D Geometry Modeling</h3>
+              <p>Refining architectural details, constructing site topographies, modeling custom millwork, and populating 3D foliage and surroundings.</p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="timeline-step" data-step="3">
+            <div class="step-marker">03</div>
+            <div class="step-content">
+              <div class="step-badge">STAGE 03</div>
+              <h3>Material Texturing & Lighting</h3>
+              <p>Applying PBR physically-based shaders (brushed metal, marble, oak) and setting solar sun vectors & volumetric fog lighting.</p>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="timeline-step" data-step="4">
+            <div class="step-marker">04</div>
+            <div class="step-content">
+              <div class="step-badge">STAGE 04</div>
+              <h3>Cinematic Camera Choreography</h3>
+              <p>Directing camera movement paths, focal lengths, depth-of-field racks, and pacing to craft an emotional architectural narrative.</p>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="timeline-step" data-step="5">
+            <div class="step-marker">05</div>
+            <div class="step-content">
+              <div class="step-badge">STAGE 05</div>
+              <h3>8K Raytraced Render & Post</h3>
+              <p>Distributing frames across high-performance render farms followed by DaVinci Resolve color grading, motion blur, and spatial audio mastering.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         INTERACTIVE PROJECT BUDGET ESTIMATOR
+         ========================================================================== -->
+    <section id="estimator" class="estimator-section section-padding">
+      <div class="container">
+        <div class="estimator-box">
+          <div class="estimator-header text-center">
+            <span class="section-tag"><i class="ri-calculator-fill"></i> INSTANT PROJECT ESTIMATOR</span>
+            <h2 class="section-title">Configure Your Scope & Timeline<span class="gold-accent">.</span></h2>
+            <p class="section-description">
+              Select your architectural project specifications below for an instant preliminary scope and cost range estimate.
+            </p>
+          </div>
+
+          <div class="estimator-grid">
+            <!-- Left Controls -->
+            <div class="estimator-controls">
+              <!-- Service Type Selector -->
+              <div class="control-group">
+                <label class="control-label"><i class="ri-building-line"></i> 1. Select Visualization Deliverable</label>
+                <div class="option-grid">
+                  <button class="option-btn active" data-type="walkthrough" data-base="4500">
+                    <i class="ri-walk-line"></i> 3D Walkthrough
+                  </button>
+                  <button class="option-btn" data-type="stills" data-base="2200">
+                    <i class="ri-image-line"></i> Exterior Stills
+                  </button>
+                  <button class="option-btn" data-type="drone" data-base="5800">
+                    <i class="ri-flight-takeoff-line"></i> Drone Flyover
+                  </button>
+                  <button class="option-btn" data-type="vr" data-base="7500">
+                    <i class="ri-headset-line"></i> VR Interactive
+                  </button>
+                </div>
+              </div>
+
+              <!-- Project Scale Slider -->
+              <div class="control-group">
+                <div class="slider-label-row">
+                  <label class="control-label"><i class="ri-ruler-line"></i> 2. Project Area / Scale</label>
+                  <span class="slider-val-badge" id="areaVal">15,000 SQ FT</span>
+                </div>
+                <input type="range" id="areaRange" min="2000" max="100000" step="1000" value="15000" class="custom-range">
+                <div class="range-ticks">
+                  <span>2,000 SQ FT</span>
+                  <span>50,000 SQ FT</span>
+                  <span>100,000+ SQ FT</span>
+                </div>
+              </div>
+
+              <!-- Video Length & Quality -->
+              <div class="control-group">
+                <div class="slider-label-row">
+                  <label class="control-label"><i class="ri-time-line"></i> 3. Animation Runtime (Seconds)</label>
+                  <span class="slider-val-badge" id="timeVal">60 SECONDS</span>
+                </div>
+                <input type="range" id="timeRange" min="30" max="180" step="15" value="60" class="custom-range">
+                <div class="range-ticks">
+                  <span>30s Short</span>
+                  <span>90s Standard</span>
+                  <span>180s Extended</span>
+                </div>
+              </div>
+
+              <!-- Turnframe Speed -->
+              <div class="control-group">
+                <label class="control-label"><i class="ri-speed-up-line"></i> 4. Turnaround Urgency</label>
+                <div class="radio-row">
+                  <label class="radio-card active">
+                    <input type="radio" name="turnaround" value="1.0" checked>
+                    <span>Standard (3-4 Weeks)</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="turnaround" value="1.3">
+                    <span>Priority (10-14 Days)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Estimate Display -->
+            <div class="estimator-result-card">
+              <div class="result-header">
+                <span class="result-tag">ESTIMATED PROJECT BUDGET</span>
+                <div class="result-price" id="calcPrice">$8,500 - $11,200</div>
+                <span class="result-disclaimer">*Preliminary estimate. Includes 8K rendering, sound design, & 2 revision cycles.</span>
+              </div>
+
+              <div class="result-summary-list">
+                <div class="summary-item">
+                  <span>Deliverable Type:</span>
+                  <strong id="sumType">3D Architectural Walkthrough</strong>
+                </div>
+                <div class="summary-item">
+                  <span>Estimated Scale:</span>
+                  <strong id="sumArea">15,000 SQ FT</strong>
+                </div>
+                <div class="summary-item">
+                  <span>Film Runtime:</span>
+                  <strong id="sumTime">60 Seconds (4K/8K)</strong>
+                </div>
+                <div class="summary-item">
+                  <span>Est. Completion:</span>
+                  <strong id="sumTimeline">3 Weeks</strong>
+                </div>
+              </div>
+
+              <a href="#contact" class="btn btn-gold btn-block" onclick="applyEstimateToContact()">
+                <span>Lock In Estimate & Contact</span>
+                <i class="ri-arrow-right-line"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         CLIENT TESTIMONIALS & ARCHITECTURE FIRM LOGOS
+         ========================================================================== -->
+    <section class="testimonials-section section-padding bg-charcoal">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-tag"><i class="ri-award-line"></i> TRUSTED BY LEADING ARCHITECTS</span>
+          <h2 class="section-title">What Our Partners Say<span class="gold-accent">.</span></h2>
+        </div>
+
+        <!-- Architecture Firm Logos Carousel -->
+        <div class="logos-strip">
+          <div class="logos-track">
+            <span class="firm-logo">FOSTER + PARTNERS</span>
+            <span class="firm-logo">ZAHA HADID ARCHITECTS</span>
+            <span class="firm-logo">BJARKE INGELS GROUP</span>
+            <span class="firm-logo">GENSLER ARCHITECTURE</span>
+            <span class="firm-logo">HERZOG & DE MEURON</span>
+            <span class="firm-logo">KENGO KUMA ASSOCIATES</span>
+            <!-- Repeated for seamless loop -->
+            <span class="firm-logo">FOSTER + PARTNERS</span>
+            <span class="firm-logo">ZAHA HADID ARCHITECTS</span>
+            <span class="firm-logo">BJARKE INGELS GROUP</span>
+          </div>
+        </div>
+
+        <!-- Testimonial Cards Carousel -->
+        <div class="testimonial-slider-container">
+          <div class="testimonial-cards-wrapper" id="testimonialWrapper">
+
+            <div class="testimonial-card active">
+              <div class="quote-icon"><i class="ri-double-quotes-l"></i></div>
+              <p class="testimonial-text">
+                "AETHER VISUALS transformed our masterplan competition entry into an emotional masterpiece. The dynamic lighting, volumetric fog, and camera direction brought the jury to tears. We won the $400M commission."
+              </p>
+              <div class="testimonial-author">
+                <div class="author-avatar">MS</div>
+                <div class="author-info">
+                  <h4>Marcus Sterling</h4>
+                  <p>Design Director, Sterling & Associates (London)</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <div class="quote-icon"><i class="ri-double-quotes-l"></i></div>
+              <p class="testimonial-text">
+                "The attention to material physics is unmatched. They perfectly captured how sunset reflections hit our brushed bronze facade. Incredible speed and cinematic perfection."
+              </p>
+              <div class="testimonial-author">
+                <div class="author-avatar">EL</div>
+                <div class="author-info">
+                  <h4>Elena Laurent</h4>
+                  <p>Principal Architect, Atelier Laurent (Paris)</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <div class="quote-icon"><i class="ri-double-quotes-l"></i></div>
+              <p class="testimonial-text">
+                "Their VR Unreal walkthrough allowed our pre-sale investors to experience our 60-story penthouse before groundbreaking. 85% of units sold out within 48 hours of releasing their film."
+              </p>
+              <div class="testimonial-author">
+                <div class="author-avatar">TK</div>
+                <div class="author-info">
+                  <h4>Takashi Kondo</h4>
+                  <p>Managing Director, Kairos Real Estate (Tokyo)</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="testimonial-controls">
+            <button class="slider-arrow" id="prevTestimonial" aria-label="Previous Testimonial"><i class="ri-arrow-left-line"></i></button>
+            <div class="slider-dots" id="sliderDots">
+              <span class="dot active" data-slide="0"></span>
+              <span class="dot" data-slide="1"></span>
+              <span class="dot" data-slide="2"></span>
+            </div>
+            <button class="slider-arrow" id="nextTestimonial" aria-label="Next Testimonial"><i class="ri-arrow-right-line"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         CONTACT & CTA SECTION
+         ========================================================================== -->
+    <section id="contact" class="contact-section section-padding">
+      <div class="container">
+        <div class="contact-grid">
+          
+          <!-- Contact Left Info & Studio World Clocks -->
+          <div class="contact-info-col">
+            <span class="section-tag"><i class="ri-mail-send-line"></i> START A CONVERSATION</span>
+            <h2 class="section-title">Let’s Elevate Your Next Architectural Vision<span class="gold-accent">.</span></h2>
+            <p class="contact-lead">
+              Have an upcoming project competition, real estate launch, or landmark design? We collaborate with studios across the globe.
+            </p>
+
+            <div class="contact-methods">
+              <div class="method-item">
+                <div class="method-icon"><i class="ri-mail-line"></i></div>
+                <div>
+                  <span class="method-label">Direct Studio Email</span>
+                  <a href="mailto:contact@aether-visuals.com" class="method-val">contact@aether-visuals.com</a>
+                </div>
+              </div>
+              <div class="method-item">
+                <div class="method-icon"><i class="ri-phone-line"></i></div>
+                <div>
+                  <span class="method-label">Direct Line / WhatsApp</span>
+                  <a href="tel:+18005559283" class="method-val">+1 (800) 555-AETHER / +44 20 7946 0912</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Global Studio Live Clocks -->
+            <div class="studio-clocks-wrapper">
+              <h4 class="clocks-title"><i class="ri-earth-line"></i> GLOBAL STUDIO TIME ZONES</h4>
+              <div class="clocks-grid">
+                <div class="clock-card">
+                  <span class="city-name">NEW YORK</span>
+                  <span class="city-time" id="clockNY">12:00 PM</span>
+                  <span class="city-status">EST / UTC-5</span>
+                </div>
+                <div class="clock-card">
+                  <span class="city-name">LONDON</span>
+                  <span class="city-time" id="clockLondon">05:00 PM</span>
+                  <span class="city-status">GMT / UTC+0</span>
+                </div>
+                <div class="clock-card">
+                  <span class="city-name">TOKYO</span>
+                  <span class="city-time" id="clockTokyo">02:00 AM</span>
+                  <span class="city-status">JST / UTC+9</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Right Form -->
+          <div class="contact-form-col">
+            <form id="contactForm" class="architectural-form" novalidate>
+              <h3 class="form-heading">Project Inquiry Form</h3>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="fullName">Your Full Name *</label>
+                  <input type="text" id="fullName" class="form-input" placeholder="e.g. Architect Sarah Lin" required>
+                  <span class="error-msg">Please enter your name</span>
+                </div>
+                <div class="form-group">
+                  <label for="emailAddress">Email Address *</label>
+                  <input type="email" id="emailAddress" class="form-input" placeholder="sarah@studio-lin.com" required>
+                  <span class="error-msg">Please enter a valid email</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="companyName">Firm / Studio Name</label>
+                  <input type="text" id="companyName" class="form-input" placeholder="e.g. Lin Architects Inc.">
+                </div>
+                <div class="form-group">
+                  <label for="projectType">Service Needed</label>
+                  <select id="projectType" class="form-input">
+                    <option value="walkthrough">3D Architectural Walkthrough</option>
+                    <option value="stills">Exterior Photorealistic Renders</option>
+                    <option value="interiors">Interior Fly-Through</option>
+                    <option value="vr">VR / AR Real-Time Walkthrough</option>
+                    <option value="drone">Drone Flyover Film</option>
+                    <option value="full">Full Real Estate Launch Package</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="projectBudget">Est. Project Budget</label>
+                <select id="projectBudget" class="form-input">
+                  <option value="5k-10k">$5,000 - $10,000</option>
+                  <option value="10k-25k" selected>$10,000 - $25,000</option>
+                  <option value="25k-50k">$25,000 - $50,000</option>
+                  <option value="50k+">$50,000+ (Masterplan Film)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="projectNotes">Project Brief & Details *</label>
+                <textarea id="projectNotes" class="form-textarea" rows="4" placeholder="Tell us about the project scale, location, CAD availability, and target deadline..." required></textarea>
+                <span class="error-msg">Please share brief project details</span>
+              </div>
+
+              <button type="submit" class="btn btn-gold btn-block btn-lg">
+                <span>Send Studio Inquiry</span>
+                <i class="ri-send-plane-fill"></i>
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       MODAL DIALOGS (Service Detail & Video Lightbox)
+       ========================================================================== -->
+  <!-- Service Modal -->
+  <div class="modal-overlay" id="serviceModal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeServiceModal()" aria-label="Close Modal"><i class="ri-close-line"></i></button>
+      <div class="modal-body" id="modalServiceBody">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Lightbox Modal -->
+  <div class="modal-overlay" id="videoModal">
+    <div class="modal-card modal-card-video">
+      <button class="modal-close" onclick="closeVideoModal()" aria-label="Close Video"><i class="ri-close-line"></i></button>
+      <div class="video-player-wrapper">
+        <div class="video-simulation-canvas">
+          <img id="videoModalImg" src="" alt="Project Video Preview">
+          <div class="video-overlay-play">
+            <div class="pulse-play-ring"><i class="ri-play-fill"></i></div>
+            <p id="videoModalTitle">Project Architectural Film Showcase</p>
+            <span class="tech-tag" id="videoModalTech">RENDERED IN UNREAL ENGINE 5.4 &bull; 8K RAYTRACED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-card text-center">
+      <div class="success-icon"><i class="ri-checkbox-circle-fill"></i></div>
+      <h3 class="gold-accent">Inquiry Received Successfully</h3>
+      <p>Thank you for reaching out to AETHER VISUALS. Our studio lead will review your project specs and respond within 12 business hours.</p>
+      <button class="btn btn-gold" onclick="closeSuccessModal()">Return to Studio</button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#heroPinSection" class="brand-logo">
+            <span class="brand-name">AETHER<span class="gold-accent">.</span></span>
+            <span class="brand-tag">ARCHVIZ STUDIO</span>
+          </a>
+          <p class="footer-desc">
+            Pioneering cinematic architectural animation, spatial 3D visualization, and real-time raytraced films for high-profile worldwide developments.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#heroPinSection">Home</a></li>
+            <li><a href="#about">Studio Philosophy</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#portfolio">Showreel</a></li>
+            <li><a href="#process">5-Step Process</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Capabilities</h4>
+          <ul class="footer-links">
+            <li><a href="#services">3D Walkthroughs</a></li>
+            <li><a href="#services">Exterior Stills</a></li>
+            <li><a href="#services">VR Walkthroughs</a></li>
+            <li><a href="#services">Drone Flyovers</a></li>
+            <li><a href="#estimator">Project Calculator</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Connect</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Vimeo"><i class="ri-vimeo-fill"></i></a>
+            <a href="#" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="ri-linkedin-fill"></i></a>
+            <a href="#" aria-label="YouTube"><i class="ri-youtube-line"></i></a>
+            <a href="#" aria-label="Behance"><i class="ri-behance-fill"></i></a>
+          </div>
+          <span class="legal-tag">&copy; 2026 AETHER VISUALS STUDIO. ALL RIGHTS RESERVED.</span>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="grid-line"></div>
+        <p>Built with architectural grid precision. Designed for cinematic excellence.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript File -->
+  <script src="js/main.js"></script>
+</body>
+</html>
