@@ -1,39 +1,12 @@
 /* ==========================================================================
    AETHER VISUALS - ARCHITECTURE ANIMATION & VISUALIZATION STUDIO
-   GSAP 260-FRAME 3D ARCHITECTURAL CANVAS SCROLL ENGINE
+   GSAP 4-IMAGE SCROLL-TRIGGERED CROSSFADE HERO SEQUENCER
    ========================================================================== */
-
-const TOTAL_FRAMES = 260;
-const frameImages = [];
-let framesLoadedCount = 0;
-let isAllFramesPreloaded = false;
-
-// Async frame preloader for all 260 ezgif-frame images
-function preloadFrameImages(onProgress) {
-  for (let i = 1; i <= TOTAL_FRAMES; i++) {
-    const img = new Image();
-    const frameNum = String(i).padStart(3, '0');
-    img.src = `assets/images/ezgif-frame-${frameNum}.png`;
-
-    img.onload = () => {
-      framesLoadedCount++;
-      if (onProgress) onProgress(framesLoadedCount, TOTAL_FRAMES);
-    };
-
-    img.onerror = () => {
-      // Fallback on load error to prevent progress hang
-      framesLoadedCount++;
-      if (onProgress) onProgress(framesLoadedCount, TOTAL_FRAMES);
-    };
-
-    frameImages.push(img);
-  }
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   initBlueprintLoader();
   initNavbar();
-  init260FrameHeroSequence();
+  init4ImageHeroSequence();
   initBeforeAfterSlider();
   initPortfolioFilter();
   initProjectEstimator();
@@ -45,8 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initServiceModals();
 });
 
+window.addEventListener('load', () => {
+  if (typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.refresh();
+  }
+});
+
 /* --------------------------------------------------------------------------
-   1. ARCHITECTURAL BLUEPRINT LOADER WITH REAL-TIME 260-FRAME PRELOADER
+   1. ARCHITECTURAL BLUEPRINT LOADER
    -------------------------------------------------------------------------- */
 function initBlueprintLoader() {
   const loader = document.getElementById('blueprintLoader');
@@ -57,13 +36,13 @@ function initBlueprintLoader() {
   if (!canvas || !loader) return;
 
   const ctx = canvas.getContext('2d');
-  let currentVisualProgress = 0;
+  let progress = 0;
 
   const statusMessages = [
-    "PRELOADING 260 ARCHITECTURAL 3D FRAMES...",
-    "SYNCHRONIZING CANVAS SCROLL ENGINE...",
-    "BUILDING RETINA-READY 2D RENDER CONTEXT...",
-    "CALIBRATING 360° ARCHITECTURAL SEQUENCE...",
+    "LOADING ARCHITECTURAL RENDERS...",
+    "SYNCHRONIZING GSAP SCROLLTRIGGER TIMELINE...",
+    "BUILDING PINNED CROSSFADE ENGINE...",
+    "CONFIGURING SCALE TRANSITIONS...",
     "READY FOR ARCHITECTURAL VISUALIZATION..."
   ];
 
@@ -114,210 +93,146 @@ function initBlueprintLoader() {
     }
   }
 
-  // Trigger frame preloading synced with blueprint progress
-  preloadFrameImages((loaded, total) => {
-    const targetProgress = Math.floor((loaded / total) * 100);
-    if (targetProgress > currentVisualProgress) {
-      currentVisualProgress = targetProgress;
-      fill.style.width = `${currentVisualProgress}%`;
-      percentText.textContent = `${currentVisualProgress}%`;
+  const interval = setInterval(() => {
+    progress += Math.floor(Math.random() * 6) + 4;
+    if (progress > 100) progress = 100;
 
-      const statusIndex = Math.min(Math.floor((currentVisualProgress / 100) * statusMessages.length), statusMessages.length - 1);
-      statusText.textContent = statusMessages[statusIndex];
+    fill.style.width = `${progress}%`;
+    percentText.textContent = `${progress}%`;
 
-      drawBlueprint(currentVisualProgress);
-    }
+    const statusIndex = Math.min(Math.floor((progress / 100) * statusMessages.length), statusMessages.length - 1);
+    statusText.textContent = statusMessages[statusIndex];
 
-    if (loaded >= total) {
-      isAllFramesPreloaded = true;
+    drawBlueprint(progress);
+
+    if (progress >= 100) {
+      clearInterval(interval);
       setTimeout(() => {
         loader.classList.add('loaded');
-        if (window.renderHeroCanvasFrame) {
-          window.renderHeroCanvasFrame(0);
-        }
-      }, 350);
+      }, 300);
     }
-  });
+  }, 20);
 }
 
 /* --------------------------------------------------------------------------
-   2. GSAP 260-FRAME 3D ARCHITECTURAL CANVAS SCROLL ENGINE
+   2. GSAP 4-IMAGE PINNED HERO CROSSFADE SEQUENCER
    -------------------------------------------------------------------------- */
-function init260FrameHeroSequence() {
+function init4ImageHeroSequence() {
   const heroPinSection = document.getElementById('heroPinSection');
-  const heroCanvas = document.getElementById('heroCanvas');
+  const img1 = document.getElementById('heroImg1');
+  const img2 = document.getElementById('heroImg2');
+  const img3 = document.getElementById('heroImg3');
+  const img4 = document.getElementById('heroImg4');
   const textOverlay = document.getElementById('heroTextOverlay');
   const badgeNum = document.getElementById('badgeNum');
   const badgeTitle = document.getElementById('badgeTitle');
-  const autoplayBtn = document.getElementById('heroAutoplayBtn');
-  const autoplayIcon = document.getElementById('autoplayIcon');
 
-  if (!heroPinSection || !heroCanvas || typeof gsap === 'undefined') return;
-
-  const ctx = heroCanvas.getContext('2d');
-  const sequenceObj = { frame: 0 };
-
-  // Responsive Canvas Sizing (High DPI Support)
-  function resizeCanvas() {
-    if (!heroCanvas) return;
-    const dpr = window.devicePixelRatio || 1;
-    heroCanvas.width = window.innerWidth * dpr;
-    heroCanvas.height = window.innerHeight * dpr;
-    heroCanvas.style.width = `${window.innerWidth}px`;
-    heroCanvas.style.height = `${window.innerHeight}px`;
-
-    renderFrame(Math.floor(sequenceObj.frame));
-  }
-
-  // Draw current frame using object-fit: cover aspect-ratio scaling
-  function renderFrame(index) {
-    if (!heroCanvas || !ctx) return;
-
-    const clampedIndex = Math.max(0, Math.min(TOTAL_FRAMES - 1, index));
-    const img = frameImages[clampedIndex];
-
-    if (!img || !img.complete || img.naturalWidth === 0) {
-      // Find nearest loaded frame if current frame is buffering
-      for (let offset = 1; offset < 40; offset++) {
-        const prev = frameImages[clampedIndex - offset];
-        if (prev && prev.complete && prev.naturalWidth !== 0) {
-          drawCover(ctx, prev, heroCanvas.width, heroCanvas.height);
-          return;
-        }
-      }
-      return;
-    }
-
-    drawCover(ctx, img, heroCanvas.width, heroCanvas.height);
-  }
-
-  function drawCover(context, img, containerWidth, containerHeight) {
-    context.clearRect(0, 0, containerWidth, containerHeight);
-
-    const imgRatio = img.naturalWidth / img.naturalHeight;
-    const containerRatio = containerWidth / containerHeight;
-    let drawWidth, drawHeight, offsetX, offsetY;
-
-    if (containerRatio > imgRatio) {
-      drawWidth = containerWidth;
-      drawHeight = containerWidth / imgRatio;
-      offsetX = 0;
-      offsetY = (containerHeight - drawHeight) / 2;
-    } else {
-      drawWidth = containerHeight * imgRatio;
-      drawHeight = containerHeight;
-      offsetX = (containerWidth - drawWidth) / 2;
-      offsetY = 0;
-    }
-
-    context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-  }
-
-  // Expose global render caller
-  window.renderHeroCanvasFrame = (frameIdx) => {
-    sequenceObj.frame = frameIdx;
-    renderFrame(frameIdx);
-  };
-
-  // Initial sizing
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
+  if (!heroPinSection || typeof gsap === 'undefined') return;
 
   gsap.registerPlugin(ScrollTrigger);
 
   // Set explicit initial GSAP properties
+  gsap.set(img1, { opacity: 1, scale: 1.0 });
+  gsap.set(img2, { opacity: 0, scale: 1.0 });
+  gsap.set(img3, { opacity: 0, scale: 1.0 });
+  gsap.set(img4, { opacity: 0, scale: 1.0 });
   gsap.set(textOverlay, { opacity: 1, y: 0 });
 
-  // Construct GSAP Pinned Scrub Timeline for 260 Frames
+  // Construct GSAP Pinned Scrub Timeline
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: "#heroPinSection",
       start: "top top",
-      end: "+=450%",
+      end: "+=300%",
       pin: true,
-      scrub: 0.5,
+      scrub: 0.6,
       onUpdate: (self) => {
         const p = self.progress;
-        const currentFrameIdx = Math.floor(sequenceObj.frame);
-        const frameFormatted = String(currentFrameIdx + 1).padStart(3, '0');
 
-        // Update Dynamic HUD Frame Counter
-        if (badgeNum) {
-          badgeNum.textContent = `${frameFormatted} / ${TOTAL_FRAMES}`;
-        }
-
-        // Update Dynamic Architectural Phase Title
-        if (badgeTitle) {
-          if (p < 0.25) {
-            badgeTitle.textContent = "CAM 01 // EXTERIOR APPROACH & ELEVATION";
-          } else if (p >= 0.25 && p < 0.50) {
-            badgeTitle.textContent = "CAM 02 // 360° STRUCTURAL FACADE ROTATION";
-          } else if (p >= 0.50 && p < 0.75) {
-            badgeTitle.textContent = "CAM 03 // VOLUMETRIC GLASS & SUNLIGHT";
-          } else {
-            badgeTitle.textContent = "CAM 04 // CINEMATIC ARCHITECTURAL MASTERPIECE";
-          }
+        // Update Dynamic Layer Badge Title
+        if (p < 0.25) {
+          badgeNum.textContent = "01 / 04";
+          badgeTitle.textContent = "BUILDING EXTERIOR FACADE";
+        } else if (p >= 0.25 && p < 0.50) {
+          badgeNum.textContent = "02 / 04";
+          badgeTitle.textContent = "EXPLODED ARCHITECTURAL CUTAWAY";
+        } else if (p >= 0.50 && p < 0.75) {
+          badgeNum.textContent = "03 / 04";
+          badgeTitle.textContent = "EXTERIOR PANORAMIC VIEW";
+        } else {
+          badgeNum.textContent = "04 / 04";
+          badgeTitle.textContent = "X-RAY WIREFRAME BLUEPRINT";
         }
       }
     }
   });
 
-  // 1. Hero Text Overlay Smooth Fade Out (0.00 -> 0.12)
-  tl.to(textOverlay, {
-    opacity: 0,
-    y: -50,
-    duration: 0.12,
-    ease: "power1.inOut"
+  // 1. Hero Text Overlay Fade Out (0.00 -> 0.15)
+  tl.to(textOverlay, { 
+    opacity: 0, 
+    y: -40, 
+    duration: 0.15, 
+    ease: "power1.inOut" 
   }, 0);
 
-  // 2. Scrub Frame Index 0 to 259 on Scroll
-  tl.to(sequenceObj, {
-    frame: TOTAL_FRAMES - 1,
-    ease: "none",
-    duration: 1,
-    onUpdate: () => {
-      renderFrame(Math.floor(sequenceObj.frame));
-    }
-  }, 0);
+  // 2. Image 1 Ken Burns Scale & Crossfade to Image 2 (0.00 -> 0.33)
+  tl.to(img1, { 
+    scale: 1.06, 
+    duration: 0.33, 
+    ease: "none" 
+  }, 0)
+  .to(img2, { 
+    opacity: 1, 
+    scale: 1.03, 
+    duration: 0.25, 
+    ease: "power2.inOut" 
+  }, 0.08)
+  .to(img1, { 
+    opacity: 0, 
+    duration: 0.20, 
+    ease: "power2.inOut" 
+  }, 0.12);
 
-  // 360° Auto-Spin Toggle Feature
-  let autoSpinTimer = null;
-  let isAutoSpinning = false;
+  // 3. Image 2 Ken Burns Scale & Crossfade to Image 3 (0.33 -> 0.66)
+  tl.to(img2, { 
+    scale: 1.06, 
+    duration: 0.33, 
+    ease: "none" 
+  }, 0.33)
+  .to(img3, { 
+    opacity: 1, 
+    scale: 1.03, 
+    duration: 0.25, 
+    ease: "power2.inOut" 
+  }, 0.41)
+  .to(img2, { 
+    opacity: 0, 
+    duration: 0.20, 
+    ease: "power2.inOut" 
+  }, 0.45);
 
-  if (autoplayBtn) {
-    autoplayBtn.addEventListener('click', () => {
-      if (isAutoSpinning) {
-        stopAutoSpin();
-      } else {
-        startAutoSpin();
-      }
-    });
-  }
-
-  function startAutoSpin() {
-    if (isAutoSpinning) return;
-    isAutoSpinning = true;
-    if (autoplayIcon) autoplayIcon.className = "ri-pause-fill";
-    if (autoplayBtn) autoplayBtn.classList.add('active');
-
-    autoSpinTimer = setInterval(() => {
-      let nextFrame = Math.floor(sequenceObj.frame) + 1;
-      if (nextFrame >= TOTAL_FRAMES) nextFrame = 0;
-
-      sequenceObj.frame = nextFrame;
-      renderFrame(nextFrame);
-
-      const frameFormatted = String(nextFrame + 1).padStart(3, '0');
-      if (badgeNum) badgeNum.textContent = `${frameFormatted} / ${TOTAL_FRAMES}`;
-    }, 40);
-  }
-
-  function stopAutoSpin() {
-    isAutoSpinning = false;
-    if (autoSpinTimer) clearInterval(autoSpinTimer);
-    if (autoplayIcon) autoplayIcon.className = "ri-play-fill";
-    if (autoplayBtn) autoplayBtn.classList.remove('active');
-  }
+  // 4. Image 3 Ken Burns Scale & Crossfade to Image 4 (0.66 -> 1.00)
+  tl.to(img3, { 
+    scale: 1.06, 
+    duration: 0.33, 
+    ease: "none" 
+  }, 0.66)
+  .to(img4, { 
+    opacity: 1, 
+    scale: 1.03, 
+    duration: 0.25, 
+    ease: "power2.inOut" 
+  }, 0.74)
+  .to(img3, { 
+    opacity: 0, 
+    duration: 0.20, 
+    ease: "power2.inOut" 
+  }, 0.78)
+  .to(img4, { 
+    scale: 1.06, 
+    duration: 0.26, 
+    ease: "none" 
+  }, 0.74);
 }
 
 /* --------------------------------------------------------------------------
