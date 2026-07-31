@@ -127,12 +127,23 @@
 
   <main>
     <!-- ==========================================================================
-         SCROLL-TRIGGERED 260-FRAME 3D ARCHITECTURAL CANVAS HERO ANIMATION ENGINE
+         SCROLL-TRIGGERED 4-IMAGE HERO SECTION (GSAP Pinned Crossfade Timeline)
          ========================================================================== -->
     <section id="heroPinSection" class="hero-pin-section">
-      <!-- 260-Frame Dynamic 3D Architecture Canvas -->
+      <!-- Stacked 4 Key Images Container -->
       <div class="hero-images-stack" id="heroImageStack">
-        <canvas id="heroCanvas" class="hero-canvas"></canvas>
+        <!-- Image 1: Building Exterior Wide Shot -->
+        <img src="./assets/images/image_1.png" alt="Building Exterior Facade" class="hero-scroll-img hero-img-1" id="heroImg1" loading="eager">
+        
+        <!-- Image 2: Exploded Architectural Cutaway -->
+        <img src="./assets/images/image_2.png" alt="Exploded Architectural Cutaway" class="hero-scroll-img hero-img-2" id="heroImg2" loading="eager">
+        
+        <!-- Image 3: Building Exterior Zoomed Out -->
+        <img src="./assets/images/image_3.png" alt="Building Exterior Zoomed Out" class="hero-scroll-img hero-img-3" id="heroImg3" loading="eager">
+        
+        <!-- Image 4: Architectural X-Ray Wireframe -->
+        <img src="./assets/images/image_4.png" alt="Architectural X-Ray Wireframe Blueprint" class="hero-scroll-img hero-img-4" id="heroImg4" loading="eager">
+
         <div class="hero-gradient-overlay"></div>
         <div class="architectural-grid-overlay"></div>
       </div>
@@ -169,14 +180,10 @@
           </div>
         </div>
 
-        <!-- Architectural Sequence HUD Status & Controls -->
+        <!-- Layer Status Badge Indicator -->
         <div class="hero-layer-badge" id="heroLayerBadge">
-          <span class="badge-num" id="badgeNum">001 / 260</span>
-          <span class="badge-title" id="badgeTitle">CAM 01 // EXTERIOR APPROACH</span>
-          <button class="hero-autoplay-btn" id="heroAutoplayBtn" aria-label="Toggle 360 Auto-Spin">
-            <i class="ri-play-fill" id="autoplayIcon"></i>
-            <span class="autoplay-text">360° SPIN</span>
-          </button>
+          <span class="badge-num" id="badgeNum">01 / 04</span>
+          <span class="badge-title" id="badgeTitle">BUILDING EXTERIOR FACADE</span>
         </div>
 
         <!-- Scroll Indicator -->
@@ -184,7 +191,7 @@
           <div class="mouse-icon">
             <div class="wheel"></div>
           </div>
-          <span class="scroll-text">SCROLL TO ROTATE & EXPLORE 3D ARCHITECTURE</span>
+          <span class="scroll-text">SCROLL TO CROSSFADE ARCHITECTURAL VIEWS</span>
         </div>
 
       </div>
@@ -212,11 +219,11 @@
 
           <div class="before-after-container" id="beforeAfterSlider">
             <!-- Background: Rendered image -->
-            <img src="assets/images/rendered.jpg" alt="Photorealistic Architectural Render" class="image-rendered">
+            <img src="./assets/images/rendered.jpg" alt="Photorealistic Architectural Render" class="image-rendered">
 
             <!-- Foreground: Wireframe image clipped -->
             <div class="wireframe-clip-wrapper" id="wireframeClip">
-              <img src="assets/images/wireframe.jpg" alt="Architectural Blueprint Wireframe" class="image-wireframe">
+              <img src="./assets/images/wireframe.jpg" alt="Architectural Blueprint Wireframe" class="image-wireframe">
             </div>
 
             <!-- Drag Handle Bar -->
@@ -354,10 +361,10 @@
             <div class="service-number">06</div>
             <div class="service-icon"><i class="ri-film-fill"></i></div>
             <h3 class="service-title">Real Estate Animation Films</h3>
-            <p class="service-desc">Turnkey promotional films complete with motion graphics, voiceover, branded titles, and ambient soundtrack designed for sales launches.</p>
+            <p class="service-desc">Complete cinematic productions. We handle storyboarding, scriptwriting, voiceover casting, 3D animation, titles, and sound mastering to deliver a turnkey launch film.</p>
             <ul class="service-features">
-              <li><i class="ri-check-line"></i> Full Storyboard & Scriptwriting</li>
-              <li><i class="ri-check-line"></i> Marketing Launch Ready Packages</li>
+              <li><i class="ri-check-line"></i> Hollywood-style storyboard & narrative direction</li>
+              <li><i class="ri-check-line"></i> Professional voiceover recording in 12+ languages</li>
             </ul>
             <button class="service-link-btn" onclick="openServiceModal(6)">
               <span>Explore Details</span>
@@ -394,10 +401,10 @@
         <div class="portfolio-grid" id="portfolioGrid">
 
           <!-- Item 1: Commercial Skyscraper -->
-          <div class="portfolio-item commercial" data-category="commercial" data-title="Horizon Tower & Sky Gardens" data-location="Dubai, UAE" data-year="2026" data-img="assets/images/project1.jpg">
+          <div class="portfolio-item commercial" data-category="commercial" data-title="Horizon Tower & Sky Gardens" data-location="Dubai, UAE" data-year="2026" data-img="./assets/images/project1.jpg">
             <div class="portfolio-card">
               <div class="card-media">
-                <img src="assets/images/project1.jpg" alt="Horizon Tower Archviz Render" loading="lazy">
+                <img src="./assets/images/project1.jpg" alt="Horizon Tower Archviz Render" loading="lazy">
                 <div class="media-overlay"></div>
                 <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
               </div>
@@ -413,10 +420,10 @@
           </div>
 
           <!-- Item 2: Residential Villa -->
-          <div class="portfolio-item residential" data-category="residential" data-title="Villa Lumina Cliffside Retreat" data-location="Amalfi Coast, Italy" data-year="2026" data-img="assets/images/rendered.jpg">
+          <div class="portfolio-item residential" data-category="residential" data-title="Villa Lumina Cliffside Retreat" data-location="Amalfi Coast, Italy" data-year="2026" data-img="./assets/images/rendered.jpg">
             <div class="portfolio-card">
               <div class="card-media">
-                <img src="assets/images/rendered.jpg" alt="Villa Lumina Render" loading="lazy">
+                <img src="./assets/images/rendered.jpg" alt="Villa Lumina Render" loading="lazy">
                 <div class="media-overlay"></div>
                 <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
               </div>
@@ -432,10 +439,10 @@
           </div>
 
           <!-- Item 3: Luxury Interior Penthouse -->
-          <div class="portfolio-item interiors" data-category="interiors" data-title="Sanctuary Penthouse Suite" data-location="New York, USA" data-year="2025" data-img="assets/images/project2.jpg">
+          <div class="portfolio-item interiors" data-category="interiors" data-title="Sanctuary Penthouse Suite" data-location="New York, USA" data-year="2025" data-img="./assets/images/project2.jpg">
             <div class="portfolio-card">
               <div class="card-media">
-                <img src="assets/images/project2.jpg" alt="Penthouse Suite Interior Render" loading="lazy">
+                <img src="./assets/images/project2.jpg" alt="Penthouse Suite Interior Render" loading="lazy">
                 <div class="media-overlay"></div>
                 <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
               </div>
@@ -451,10 +458,10 @@
           </div>
 
           <!-- Item 4: Urban Museum Pavilion -->
-          <div class="portfolio-item urban" data-category="urban" data-title="Neo-Civic Cultural Center" data-location="Tokyo, Japan" data-year="2026" data-img="assets/images/project3.jpg">
+          <div class="portfolio-item urban" data-category="urban" data-title="Neo-Civic Cultural Center" data-location="Tokyo, Japan" data-year="2026" data-img="./assets/images/project3.jpg">
             <div class="portfolio-card">
               <div class="card-media">
-                <img src="assets/images/project3.jpg" alt="Neo-Civic Cultural Center Render" loading="lazy">
+                <img src="./assets/images/project3.jpg" alt="Neo-Civic Cultural Center Render" loading="lazy">
                 <div class="media-overlay"></div>
                 <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
               </div>
@@ -470,10 +477,10 @@
           </div>
 
           <!-- Item 5: Drone Coastal Masterplan -->
-          <div class="portfolio-item residential" data-category="residential" data-title="Aura Coastal Resort & Villas" data-location="Maldives" data-year="2025" data-img="assets/images/project4.jpg">
+          <div class="portfolio-item residential" data-category="residential" data-title="Aura Coastal Resort & Villas" data-location="Maldives" data-year="2025" data-img="./assets/images/project4.jpg">
             <div class="portfolio-card">
               <div class="card-media">
-                <img src="assets/images/project4.jpg" alt="Aura Coastal Resort Render" loading="lazy">
+                <img src="./assets/images/project4.jpg" alt="Aura Coastal Resort Render" loading="lazy">
                 <div class="media-overlay"></div>
                 <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
               </div>
@@ -489,10 +496,10 @@
           </div>
 
           <!-- Item 6: Hero Skyscraper Landmark -->
-          <div class="portfolio-item commercial" data-category="commercial" data-title="Zenith Financial Plaza" data-location="London, UK" data-year="2026" data-img="assets/images/hero.jpg">
+          <div class="portfolio-item commercial" data-category="commercial" data-title="Zenith Financial Plaza" data-location="London, UK" data-year="2026" data-img="./assets/images/hero.jpg">
             <div class="portfolio-card">
               <div class="card-media">
-                <img src="assets/images/hero.jpg" alt="Zenith Financial Plaza Render" loading="lazy">
+                <img src="./assets/images/hero.jpg" alt="Zenith Financial Plaza Render" loading="lazy">
                 <div class="media-overlay"></div>
                 <div class="play-badge"><i class="ri-play-fill"></i> PLAY FILM</div>
               </div>

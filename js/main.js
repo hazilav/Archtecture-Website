@@ -115,7 +115,7 @@ function initBlueprintLoader() {
 }
 
 /* --------------------------------------------------------------------------
-   2. GSAP 4-IMAGE PINNED HERO CROSSFADE SEQUENCER
+   2. GSAP 4-IMAGE PINNED HERO CROSSFADE SEQUENCER (With Auto-Retry for CDN)
    -------------------------------------------------------------------------- */
 function init4ImageHeroSequence() {
   const heroPinSection = document.getElementById('heroPinSection');
@@ -127,112 +127,125 @@ function init4ImageHeroSequence() {
   const badgeNum = document.getElementById('badgeNum');
   const badgeTitle = document.getElementById('badgeTitle');
 
-  if (!heroPinSection || typeof gsap === 'undefined') return;
+  if (!heroPinSection) return;
 
-  gsap.registerPlugin(ScrollTrigger);
+  function runTimelineSetup() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      setTimeout(runTimelineSetup, 50);
+      return;
+    }
 
-  // Set explicit initial GSAP properties
-  gsap.set(img1, { opacity: 1, scale: 1.0 });
-  gsap.set(img2, { opacity: 0, scale: 1.0 });
-  gsap.set(img3, { opacity: 0, scale: 1.0 });
-  gsap.set(img4, { opacity: 0, scale: 1.0 });
-  gsap.set(textOverlay, { opacity: 1, y: 0 });
+    gsap.registerPlugin(ScrollTrigger);
 
-  // Construct GSAP Pinned Scrub Timeline
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: "#heroPinSection",
-      start: "top top",
-      end: "+=300%",
-      pin: true,
-      scrub: 0.6,
-      onUpdate: (self) => {
-        const p = self.progress;
+    // Set initial GSAP state
+    gsap.set(img1, { opacity: 1, scale: 1.0 });
+    gsap.set(img2, { opacity: 0, scale: 1.0 });
+    gsap.set(img3, { opacity: 0, scale: 1.0 });
+    gsap.set(img4, { opacity: 0, scale: 1.0 });
+    gsap.set(textOverlay, { opacity: 1, y: 0 });
 
-        // Update Dynamic Layer Badge Title
-        if (p < 0.25) {
-          badgeNum.textContent = "01 / 04";
-          badgeTitle.textContent = "BUILDING EXTERIOR FACADE";
-        } else if (p >= 0.25 && p < 0.50) {
-          badgeNum.textContent = "02 / 04";
-          badgeTitle.textContent = "EXPLODED ARCHITECTURAL CUTAWAY";
-        } else if (p >= 0.50 && p < 0.75) {
-          badgeNum.textContent = "03 / 04";
-          badgeTitle.textContent = "EXTERIOR PANORAMIC VIEW";
-        } else {
-          badgeNum.textContent = "04 / 04";
-          badgeTitle.textContent = "X-RAY WIREFRAME BLUEPRINT";
+    // Construct GSAP Pinned Scrub Timeline
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#heroPinSection",
+        start: "top top",
+        end: "+=300%",
+        pin: true,
+        scrub: 0.6,
+        onUpdate: (self) => {
+          const p = self.progress;
+
+          // Update Dynamic Layer Badge Title
+          if (p < 0.25) {
+            badgeNum.textContent = "01 / 04";
+            badgeTitle.textContent = "BUILDING EXTERIOR FACADE";
+          } else if (p >= 0.25 && p < 0.50) {
+            badgeNum.textContent = "02 / 04";
+            badgeTitle.textContent = "EXPLODED ARCHITECTURAL CUTAWAY";
+          } else if (p >= 0.50 && p < 0.75) {
+            badgeNum.textContent = "03 / 04";
+            badgeTitle.textContent = "EXTERIOR PANORAMIC VIEW";
+          } else {
+            badgeNum.textContent = "04 / 04";
+            badgeTitle.textContent = "X-RAY WIREFRAME BLUEPRINT";
+          }
         }
       }
-    }
-  });
+    });
 
-  // 1. Hero Text Overlay Fade Out (0.00 -> 0.15)
-  tl.to(textOverlay, { 
-    opacity: 0, 
-    y: -40, 
-    duration: 0.15, 
-    ease: "power1.inOut" 
-  }, 0);
+    // 1. Hero Text Overlay Fade Out (0.00 -> 0.15)
+    tl.to(textOverlay, { 
+      opacity: 0, 
+      y: -40, 
+      duration: 0.15, 
+      ease: "power1.inOut" 
+    }, 0);
 
-  // 2. Image 1 Ken Burns Scale & Crossfade to Image 2 (0.00 -> 0.33)
-  tl.to(img1, { 
-    scale: 1.06, 
-    duration: 0.33, 
-    ease: "none" 
-  }, 0)
-  .to(img2, { 
-    opacity: 1, 
-    scale: 1.03, 
-    duration: 0.25, 
-    ease: "power2.inOut" 
-  }, 0.08)
-  .to(img1, { 
-    opacity: 0, 
-    duration: 0.20, 
-    ease: "power2.inOut" 
-  }, 0.12);
+    // 2. Image 1 Ken Burns Scale & Crossfade to Image 2 (0.00 -> 0.33)
+    tl.to(img1, { 
+      scale: 1.06, 
+      duration: 0.33, 
+      ease: "none" 
+    }, 0)
+    .to(img2, { 
+      opacity: 1, 
+      scale: 1.03, 
+      duration: 0.25, 
+      ease: "power2.inOut" 
+    }, 0.08)
+    .to(img1, { 
+      opacity: 0, 
+      duration: 0.20, 
+      ease: "power2.inOut" 
+    }, 0.12);
 
-  // 3. Image 2 Ken Burns Scale & Crossfade to Image 3 (0.33 -> 0.66)
-  tl.to(img2, { 
-    scale: 1.06, 
-    duration: 0.33, 
-    ease: "none" 
-  }, 0.33)
-  .to(img3, { 
-    opacity: 1, 
-    scale: 1.03, 
-    duration: 0.25, 
-    ease: "power2.inOut" 
-  }, 0.41)
-  .to(img2, { 
-    opacity: 0, 
-    duration: 0.20, 
-    ease: "power2.inOut" 
-  }, 0.45);
+    // 3. Image 2 Ken Burns Scale & Crossfade to Image 3 (0.33 -> 0.66)
+    tl.to(img2, { 
+      scale: 1.06, 
+      duration: 0.33, 
+      ease: "none" 
+    }, 0.33)
+    .to(img3, { 
+      opacity: 1, 
+      scale: 1.03, 
+      duration: 0.25, 
+      ease: "power2.inOut" 
+    }, 0.41)
+    .to(img2, { 
+      opacity: 0, 
+      duration: 0.20, 
+      ease: "power2.inOut" 
+    }, 0.45);
 
-  // 4. Image 3 Ken Burns Scale & Crossfade to Image 4 (0.66 -> 1.00)
-  tl.to(img3, { 
-    scale: 1.06, 
-    duration: 0.33, 
-    ease: "none" 
-  }, 0.66)
-  .to(img4, { 
-    opacity: 1, 
-    scale: 1.03, 
-    duration: 0.25, 
-    ease: "power2.inOut" 
-  }, 0.74)
-  .to(img3, { 
-    opacity: 0, 
-    duration: 0.20, 
-    ease: "power2.inOut" 
-  }, 0.78)
-  .to(img4, { 
-    scale: 1.06, 
-    duration: 0.26, 
-    ease: "none" 
-  }, 0.74);
+    // 4. Image 3 Ken Burns Scale & Crossfade to Image 4 (0.66 -> 1.00)
+    tl.to(img3, { 
+      scale: 1.06, 
+      duration: 0.33, 
+      ease: "none" 
+    }, 0.66)
+    .to(img4, { 
+      opacity: 1, 
+      scale: 1.03, 
+      duration: 0.25, 
+      ease: "power2.inOut" 
+    }, 0.74)
+    .to(img3, { 
+      opacity: 0, 
+      duration: 0.20, 
+      ease: "power2.inOut" 
+    }, 0.78)
+    .to(img4, { 
+      scale: 1.06, 
+      duration: 0.26, 
+      ease: "none" 
+    }, 0.74);
+
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+  }
+
+  runTimelineSetup();
 }
 
 /* --------------------------------------------------------------------------
@@ -367,7 +380,7 @@ function initPortfolioFilter() {
   items.forEach(item => {
     item.addEventListener('click', () => {
       const title = item.getAttribute('data-title') || 'Project Architectural Film';
-      const imgSrc = item.getAttribute('data-img') || 'assets/images/image_1.png';
+      const imgSrc = item.getAttribute('data-img') || './assets/images/image_1.png';
       openVideoModal(title, imgSrc);
     });
   });
